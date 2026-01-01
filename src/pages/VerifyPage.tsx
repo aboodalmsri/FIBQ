@@ -1,47 +1,66 @@
 import { motion } from "framer-motion";
-import { AlertCircle, Award, Calendar, CheckCircle, QrCode, Search, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { AlertCircle, CheckCircle, Download, FileImage, QrCode, Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { QRCodeSVG } from "qrcode.react";
+import { CertificatePreview } from "@/components/certificate/CertificatePreview";
+import { CertificateData, defaultTemplates, isValidCertificateNumber } from "@/types/certificate";
+import { useCertificateExport } from "@/hooks/useCertificateExport";
 
-// Mock certificate data for demonstration
-const mockCertificates: Record<string, {
-  id: string;
-  holderName: string;
-  title: string;
-  grade?: string;
-  issueDate: string;
-  status: "valid" | "revoked" | "expired";
-  issuingAuthority: string;
-}> = {
-  "CERT-2024-001": {
-    id: "CERT-2024-001",
-    holderName: "John Michael Smith",
-    title: "Advanced Web Development",
-    grade: "Distinction",
-    issueDate: "2024-06-15",
+// Mock certificate data for demonstration with FIBQ format
+const mockCertificates: Record<string, CertificateData> = {
+  "FIBQ-A1B2-C3D4": {
+    certificateNumber: "FIBQ-A1B2-C3D4",
+    traineeName: "John Michael Smith",
+    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
+    trainingProgramName: "Quality Management Systems (ISO 9001)",
+    atcCode: "ATC-5678",
+    dateOfIssue: "2024-06-15",
+    placeOfIssue: "French Republic",
+    chairpersonName: "Dr. Marie Laurent",
+    chairpersonTitle: "Chairperson of the Accreditation Board",
+    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
+    showSeal: true,
+    showQRCode: true,
+    templateId: "classic-gold",
     status: "valid",
-    issuingAuthority: "CertifyPro Academy",
+    certificateType: "trainee",
   },
-  "CERT-2024-002": {
-    id: "CERT-2024-002",
-    holderName: "Sarah Jane Williams",
-    title: "Digital Marketing Fundamentals",
-    grade: "Merit",
-    issueDate: "2024-08-20",
+  "FIBQ-X9Y8-Z7W6": {
+    certificateNumber: "FIBQ-X9Y8-Z7W6",
+    traineeName: "Sarah Jane Williams",
+    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
+    trainingProgramName: "Digital Marketing Fundamentals",
+    atcCode: "ATC-1234",
+    dateOfIssue: "2024-08-20",
+    placeOfIssue: "French Republic",
+    chairpersonName: "Dr. Marie Laurent",
+    chairpersonTitle: "Chairperson of the Accreditation Board",
+    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
+    showSeal: true,
+    showQRCode: true,
+    templateId: "modern-navy",
     status: "valid",
-    issuingAuthority: "CertifyPro Academy",
+    certificateType: "trainee",
   },
-  "CERT-2023-150": {
-    id: "CERT-2023-150",
-    holderName: "Robert Brown",
-    title: "Project Management Professional",
-    issueDate: "2023-03-10",
+  "FIBQ-E5F6-G7H8": {
+    certificateNumber: "FIBQ-E5F6-G7H8",
+    traineeName: "Robert Brown",
+    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
+    trainingProgramName: "Project Management Professional",
+    atcCode: "ATC-9012",
+    dateOfIssue: "2023-03-10",
+    placeOfIssue: "French Republic",
+    chairpersonName: "Dr. Marie Laurent",
+    chairpersonTitle: "Chairperson of the Accreditation Board",
+    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
+    showSeal: true,
+    showQRCode: true,
+    templateId: "ornate-traditional",
     status: "expired",
-    issuingAuthority: "CertifyPro Academy",
+    certificateType: "trainer",
   },
 };
 
@@ -51,8 +70,11 @@ export default function VerifyPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResult, setSearchResult] = useState<{
     found: boolean;
-    certificate?: typeof mockCertificates["CERT-2024-001"];
+    certificate?: CertificateData;
   } | null>(null);
+  
+  const certificateRef = useRef<HTMLDivElement>(null);
+  const { exportToPDF, exportToImage, isExporting } = useCertificateExport();
 
   useEffect(() => {
     const number = searchParams.get("number");
@@ -99,6 +121,20 @@ export default function VerifyPage() {
     }
   };
 
+  const handleExportPDF = () => {
+    const element = certificateRef.current?.querySelector(".certificate-preview > div") as HTMLElement;
+    if (searchResult?.certificate) {
+      exportToPDF(element, `certificate-${searchResult.certificate.certificateNumber}`);
+    }
+  };
+
+  const handleExportImage = () => {
+    const element = certificateRef.current?.querySelector(".certificate-preview > div") as HTMLElement;
+    if (searchResult?.certificate) {
+      exportToImage(element, `certificate-${searchResult.certificate.certificateNumber}`);
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -130,10 +166,10 @@ export default function VerifyPage() {
                     <Input
                       variant="hero"
                       inputSize="lg"
-                      placeholder="Enter certificate number (e.g., CERT-2024-001)"
+                      placeholder="Enter certificate number (e.g., FIBQ-A1B2-C3D4)"
                       value={searchNumber}
-                      onChange={(e) => setSearchNumber(e.target.value)}
-                      className="pl-12"
+                      onChange={(e) => setSearchNumber(e.target.value.toUpperCase())}
+                      className="pl-12 font-mono"
                     />
                   </div>
                   <Button
@@ -175,114 +211,75 @@ export default function VerifyPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mx-auto max-w-3xl"
+              className="mx-auto max-w-5xl"
             >
               {searchResult.found && searchResult.certificate ? (
-                <Card variant="gold" className="overflow-hidden">
-                  <CardHeader className="border-b border-border bg-muted/50 p-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-green-100">
-                          <CheckCircle className="h-8 w-8 text-green-600" />
+                <div className="space-y-6">
+                  {/* Status Card */}
+                  <Card variant="gold" className="overflow-hidden">
+                    <CardHeader className="border-b border-border bg-muted/50 p-6">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-green-100">
+                            <CheckCircle className="h-8 w-8 text-green-600" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-xl text-foreground">
+                              Certificate Verified
+                            </CardTitle>
+                            <p className="text-sm text-muted-foreground">
+                              This certificate is authentic and officially issued.
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-xl text-foreground">
-                            Certificate Verified
-                          </CardTitle>
-                          <p className="text-sm text-muted-foreground">
-                            This certificate is authentic and officially issued.
-                          </p>
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`rounded-full border px-4 py-1.5 text-sm font-medium capitalize ${getStatusColor(
+                              searchResult.certificate.status
+                            )}`}
+                          >
+                            {searchResult.certificate.status}
+                          </span>
                         </div>
                       </div>
-                      <span
-                        className={`rounded-full border px-4 py-1.5 text-sm font-medium capitalize ${getStatusColor(
-                          searchResult.certificate.status
-                        )}`}
+                    </CardHeader>
+
+                    <CardContent className="p-6">
+                      <div className="flex flex-wrap gap-3 mb-6">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleExportImage}
+                          disabled={isExporting}
+                        >
+                          <FileImage className="mr-2 h-4 w-4" />
+                          Download PNG
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={handleExportPDF}
+                          disabled={isExporting}
+                        >
+                          <Download className="mr-2 h-4 w-4" />
+                          Download PDF
+                        </Button>
+                      </div>
+
+                      {/* Certificate Preview */}
+                      <div
+                        ref={certificateRef}
+                        className="overflow-auto rounded-lg border border-border bg-muted/30 p-4"
                       >
-                        {searchResult.certificate.status}
-                      </span>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="p-6">
-                    <div className="grid gap-8 md:grid-cols-3">
-                      {/* Certificate Details */}
-                      <div className="space-y-6 md:col-span-2">
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <User className="h-4 w-4" />
-                              Certificate Holder
-                            </div>
-                            <p className="font-heading text-lg font-semibold text-foreground">
-                              {searchResult.certificate.holderName}
-                            </p>
-                          </div>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Award className="h-4 w-4" />
-                              Certificate Title
-                            </div>
-                            <p className="font-heading text-lg font-semibold text-foreground">
-                              {searchResult.certificate.title}
-                            </p>
-                          </div>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Calendar className="h-4 w-4" />
-                              Issue Date
-                            </div>
-                            <p className="font-medium text-foreground">
-                              {new Date(
-                                searchResult.certificate.issueDate
-                              ).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                          {searchResult.certificate.grade && (
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <CheckCircle className="h-4 w-4" />
-                                Grade/Result
-                              </div>
-                              <p className="font-medium text-foreground">
-                                {searchResult.certificate.grade}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="rounded-lg border border-border bg-muted/30 p-4">
-                          <p className="text-sm text-muted-foreground">
-                            <strong className="text-foreground">Certificate Number:</strong>{" "}
-                            {searchResult.certificate.id}
-                          </p>
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            <strong className="text-foreground">Issuing Authority:</strong>{" "}
-                            {searchResult.certificate.issuingAuthority}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* QR Code */}
-                      <div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card p-6">
-                        <QRCodeSVG
-                          value={`${window.location.origin}/verify?number=${searchResult.certificate.id}`}
-                          size={140}
-                          level="H"
-                          includeMargin
-                          className="rounded-lg"
+                        <CertificatePreview
+                          data={searchResult.certificate}
+                          template={defaultTemplates.find((t) => t.id === searchResult.certificate?.templateId)}
+                          scale={0.75}
                         />
-                        <p className="mt-3 text-center text-xs text-muted-foreground">
-                          Scan to verify
-                        </p>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </div>
               ) : (
                 <Card variant="default" className="border-destructive/20">
                   <CardHeader className="p-6">
@@ -306,8 +303,8 @@ export default function VerifyPage() {
                         <strong className="text-foreground">Tips:</strong>
                       </p>
                       <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                        <li>Certificate numbers follow the format: FIBQ-XXXX-XXXX</li>
                         <li>Check that you've entered the certificate number correctly</li>
-                        <li>Certificate numbers are case-sensitive</li>
                         <li>Try scanning the QR code on the physical certificate</li>
                         <li>Contact support if you believe this is an error</li>
                       </ul>
@@ -341,9 +338,9 @@ export default function VerifyPage() {
                       Demo Certificate Numbers:
                     </p>
                     <ul className="mt-2 space-y-1 font-mono text-sm text-muted-foreground">
-                      <li>• CERT-2024-001 (Valid)</li>
-                      <li>• CERT-2024-002 (Valid)</li>
-                      <li>• CERT-2023-150 (Expired)</li>
+                      <li>• FIBQ-A1B2-C3D4 (Valid - Trainee)</li>
+                      <li>• FIBQ-X9Y8-Z7W6 (Valid - Trainee)</li>
+                      <li>• FIBQ-E5F6-G7H8 (Expired - Trainer)</li>
                     </ul>
                   </div>
                 </div>

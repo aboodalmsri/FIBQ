@@ -21,21 +21,55 @@ export function useCertificateExport() {
       setIsExporting(true);
 
       try {
-        const canvas = await html2canvas(element, {
-          scale: 2,
+        // Create a clone for export to avoid visual artifacts
+        const clone = element.cloneNode(true) as HTMLElement;
+        clone.style.transform = "none";
+        clone.style.position = "absolute";
+        clone.style.left = "-9999px";
+        clone.style.top = "0";
+        document.body.appendChild(clone);
+
+        const canvas = await html2canvas(clone, {
+          scale: 3, // Higher scale for better quality
           useCORS: true,
           allowTaint: true,
           backgroundColor: null,
+          logging: false,
+          imageTimeout: 0,
+          onclone: (clonedDoc) => {
+            // Ensure fonts are loaded in clone
+            const clonedElement = clonedDoc.body.querySelector('.certificate-preview > div');
+            if (clonedElement) {
+              (clonedElement as HTMLElement).style.transform = 'none';
+            }
+          }
         });
 
-        const imgData = canvas.toDataURL("image/png");
+        document.body.removeChild(clone);
+
+        const imgData = canvas.toDataURL("image/png", 1.0);
+        
+        // A4 landscape dimensions in mm
+        const pdfWidth = 297;
+        const pdfHeight = 210;
+        
         const pdf = new jsPDF({
           orientation: "landscape",
-          unit: "px",
-          format: [canvas.width / 2, canvas.height / 2],
+          unit: "mm",
+          format: "a4",
         });
 
-        pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 2, canvas.height / 2);
+        // Calculate dimensions to fit the certificate centered on A4
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight) * 0.9;
+        
+        const finalWidth = imgWidth * ratio;
+        const finalHeight = imgHeight * ratio;
+        const x = (pdfWidth - finalWidth) / 2;
+        const y = (pdfHeight - finalHeight) / 2;
+
+        pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
         pdf.save(`${fileName}.pdf`);
 
         toast({
@@ -70,16 +104,28 @@ export function useCertificateExport() {
       setIsExporting(true);
 
       try {
-        const canvas = await html2canvas(element, {
-          scale: 2,
+        // Create a clone for export
+        const clone = element.cloneNode(true) as HTMLElement;
+        clone.style.transform = "none";
+        clone.style.position = "absolute";
+        clone.style.left = "-9999px";
+        clone.style.top = "0";
+        document.body.appendChild(clone);
+
+        const canvas = await html2canvas(clone, {
+          scale: 3, // Higher scale for better quality
           useCORS: true,
           allowTaint: true,
           backgroundColor: null,
+          logging: false,
+          imageTimeout: 0,
         });
+
+        document.body.removeChild(clone);
 
         const link = document.createElement("a");
         link.download = `${fileName}.png`;
-        link.href = canvas.toDataURL("image/png");
+        link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
 
         toast({

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Award, Calendar, Download, FileImage, MapPin, Save, User } from "lucide-react";
+import { Award, Calendar, Download, FileImage, ImagePlus, MapPin, Save, User, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,11 +9,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { CertificatePreview } from "@/components/certificate/CertificatePreview";
 import { TemplateSelector } from "@/components/certificate/TemplateSelector";
 import { useCertificateExport } from "@/hooks/useCertificateExport";
-import { CertificateData, defaultCertificateData, defaultTemplates } from "@/types/certificate";
+import { 
+  CertificateData, 
+  CertificateType,
+  certificateTypeLabels,
+  defaultCertificateData, 
+  defaultTemplates,
+  generateCertificateNumber,
+  generateATCCode,
+} from "@/types/certificate";
 
 export default function CreateCertificatePage() {
   const navigate = useNavigate();
@@ -28,19 +37,8 @@ export default function CreateCertificatePage() {
     trainingProgramName: "",
     atcCode: "",
     dateOfIssue: new Date().toISOString().split("T")[0],
+    certificateType: "trainee",
   });
-
-  const generateCertificateNumber = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const part1 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-    const part2 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-    return `FIBQ-${part1}-${part2}`;
-  };
-
-  const generateATCCode = () => {
-    const num = Math.floor(Math.random() * 9000) + 1000;
-    return `ATC-${num}`;
-  };
 
   const handleAutoGenerate = (field: "certificateNumber" | "atcCode") => {
     setFormData((prev) => ({
@@ -68,6 +66,27 @@ export default function CreateCertificatePage() {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setFormData((prev) => ({
+          ...prev,
+          traineePhoto: event.target?.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removePhoto = () => {
+    setFormData((prev) => ({
+      ...prev,
+      traineePhoto: undefined,
     }));
   };
 
@@ -114,6 +133,28 @@ export default function CreateCertificatePage() {
 
                 <TabsContent value="details">
                   <form className="space-y-5">
+                    {/* Certificate Type */}
+                    <div className="space-y-2">
+                      <Label>Certificate Type</Label>
+                      <Select
+                        value={formData.certificateType}
+                        onValueChange={(value: CertificateType) =>
+                          setFormData((prev) => ({ ...prev, certificateType: value }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select certificate type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(certificateTypeLabels).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     {/* Certificate Number */}
                     <div className="space-y-2">
                       <Label>Certificate Number</Label>
@@ -122,7 +163,10 @@ export default function CreateCertificatePage() {
                           name="certificateNumber"
                           placeholder="FIBQ-XXXX-XXXX"
                           value={formData.certificateNumber}
-                          onChange={handleChange}
+                          onChange={(e) => setFormData(prev => ({ 
+                            ...prev, 
+                            certificateNumber: e.target.value.toUpperCase() 
+                          }))}
                           className="font-mono"
                         />
                         <Button
@@ -133,6 +177,9 @@ export default function CreateCertificatePage() {
                           Generate
                         </Button>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        Format: FIBQ-XXXX-XXXX
+                      </p>
                     </div>
 
                     {/* Trainee Name */}
@@ -148,6 +195,43 @@ export default function CreateCertificatePage() {
                         onChange={handleChange}
                         required
                       />
+                    </div>
+
+                    {/* Trainee Photo */}
+                    <div className="space-y-2">
+                      <Label>
+                        <ImagePlus className="mr-2 inline-block h-4 w-4" />
+                        Trainee Photo (Optional)
+                      </Label>
+                      {formData.traineePhoto ? (
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-border">
+                            <img
+                              src={formData.traineePhoto}
+                              alt="Trainee"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={removePhoto}
+                          >
+                            <X className="mr-2 h-4 w-4" />
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-4">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                            className="max-w-xs"
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Training Program */}
