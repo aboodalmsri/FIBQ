@@ -1,3 +1,5 @@
+export type CertificateType = "trainee" | "accredited-center" | "trainer";
+
 export interface CertificateTemplate {
   id: string;
   name: string;
@@ -7,12 +9,15 @@ export interface CertificateTemplate {
   accentColor: string;
   showSeal: boolean;
   showQRCode: boolean;
+  fontFamily?: string;
+  certificateType?: CertificateType;
 }
 
 export interface CertificateData {
   id?: string;
   certificateNumber: string;
   traineeName: string;
+  traineePhoto?: string;
   certificateTitle: string;
   trainingProgramName: string;
   atcCode: string;
@@ -26,7 +31,14 @@ export interface CertificateData {
   templateId: string;
   status: "valid" | "revoked" | "expired";
   createdAt?: string;
+  certificateType: CertificateType;
 }
+
+export const certificateTypeLabels: Record<CertificateType, string> = {
+  trainee: "Trainee Certificate",
+  "accredited-center": "Accredited Center Certificate",
+  trainer: "Trainer Accreditation Certificate",
+};
 
 export const defaultTemplates: CertificateTemplate[] = [
   {
@@ -81,4 +93,24 @@ export const defaultCertificateData: Partial<CertificateData> = {
   showQRCode: true,
   templateId: "classic-gold",
   status: "valid",
+  certificateType: "trainee",
 };
+
+// Generate certificate number in FIBQ-XXXX-XXXX format
+export function generateCertificateNumber(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const part1 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  const part2 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return `FIBQ-${part1}-${part2}`;
+}
+
+// Validate certificate number format
+export function isValidCertificateNumber(number: string): boolean {
+  return /^FIBQ-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(number);
+}
+
+// Generate ATC code
+export function generateATCCode(): string {
+  const num = Math.floor(Math.random() * 9000) + 1000;
+  return `ATC-${num}`;
+}
