@@ -13,6 +13,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CertificatesListPage from "./pages/admin/CertificatesListPage";
 import CreateCertificatePage from "./pages/admin/CreateCertificatePage";
+import TemplatesPage from "./pages/admin/TemplatesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="certificates" element={<CertificatesListPage />} />
             <Route path="certificates/new" element={<CreateCertificatePage />} />
+            <Route path="templates" element={<TemplatesPage />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

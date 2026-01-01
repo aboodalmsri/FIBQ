@@ -1,38 +1,51 @@
 import { motion } from "framer-motion";
-import { Award, Calendar, Save, User } from "lucide-react";
-import { useState } from "react";
+import { Award, Calendar, Download, FileImage, MapPin, Save, User } from "lucide-react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { QRCodeSVG } from "qrcode.react";
+import { CertificatePreview } from "@/components/certificate/CertificatePreview";
+import { TemplateSelector } from "@/components/certificate/TemplateSelector";
+import { useCertificateExport } from "@/hooks/useCertificateExport";
+import { CertificateData, defaultCertificateData, defaultTemplates } from "@/types/certificate";
 
 export default function CreateCertificatePage() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const certificateRef = useRef<HTMLDivElement>(null);
+  const { exportToPDF, exportToImage, isExporting } = useCertificateExport();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    holderName: "",
-    certificateTitle: "",
-    grade: "",
-    issueDate: new Date().toISOString().split("T")[0],
+  const [formData, setFormData] = useState<Partial<CertificateData>>({
+    ...defaultCertificateData,
     certificateNumber: "",
+    traineeName: "",
+    trainingProgramName: "",
+    atcCode: "",
+    dateOfIssue: new Date().toISOString().split("T")[0],
   });
 
   const generateCertificateNumber = () => {
-    const year = new Date().getFullYear();
-    const random = Math.floor(Math.random() * 1000)
-      .toString()
-      .padStart(3, "0");
-    return `CERT-${year}-${random}`;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const part1 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    const part2 = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return `FIBQ-${part1}-${part2}`;
   };
 
-  const handleAutoGenerate = () => {
+  const generateATCCode = () => {
+    const num = Math.floor(Math.random() * 9000) + 1000;
+    return `ATC-${num}`;
+  };
+
+  const handleAutoGenerate = (field: "certificateNumber" | "atcCode") => {
     setFormData((prev) => ({
       ...prev,
-      certificateNumber: generateCertificateNumber(),
+      [field]: field === "certificateNumber" ? generateCertificateNumber() : generateATCCode(),
     }));
   };
 
@@ -40,26 +53,33 @@ export default function CreateCertificatePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
       title: "Certificate Created!",
-      description: `Certificate ${formData.certificateNumber || "auto-generated"} has been created successfully.`,
+      description: `Certificate ${formData.certificateNumber} has been created successfully.`,
     });
 
     setIsSubmitting(false);
     navigate("/admin/certificates");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const previewCertNumber = formData.certificateNumber || "CERT-XXXX-XXX";
+  const handleExportPDF = () => {
+    const element = certificateRef.current?.querySelector(".certificate-preview > div") as HTMLElement;
+    exportToPDF(element, `certificate-${formData.certificateNumber || "preview"}`);
+  };
+
+  const handleExportImage = () => {
+    const element = certificateRef.current?.querySelector(".certificate-preview > div") as HTMLElement;
+    exportToImage(element, `certificate-${formData.certificateNumber || "preview"}`);
+  };
 
   return (
     <div className="p-6 md:p-8">
@@ -67,207 +87,316 @@ export default function CreateCertificatePage() {
       <div className="mb-8">
         <h1 className="font-heading text-3xl font-bold text-foreground">Create Certificate</h1>
         <p className="mt-1 text-muted-foreground">
-          Fill in the details to create a new certificate.
+          Design and generate a new certificate with all required fields.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Form */}
+      <div className="grid gap-8 xl:grid-cols-2">
+        {/* Form Section */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="lg:col-span-2"
         >
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Certificate Details</CardTitle>
               <CardDescription>
-                Enter the information for the new certificate.
+                Fill in all required information for the certificate.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Certificate Number */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
-                    Certificate Number
-                  </label>
-                  <div className="flex gap-3">
-                    <Input
-                      name="certificateNumber"
-                      placeholder="CERT-2024-001"
-                      value={formData.certificateNumber}
-                      onChange={handleChange}
-                      className="font-mono"
-                    />
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      onClick={handleAutoGenerate}
-                    >
-                      Auto-Generate
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Leave empty to auto-generate or enter a custom number.
-                  </p>
-                </div>
+              <Tabs defaultValue="details" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsTrigger value="details">Details</TabsTrigger>
+                  <TabsTrigger value="issuer">Issuer Info</TabsTrigger>
+                  <TabsTrigger value="template">Template</TabsTrigger>
+                </TabsList>
 
-                {/* Holder Name */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
-                    <User className="mr-2 inline-block h-4 w-4" />
-                    Full Name of Certificate Holder
-                  </label>
-                  <Input
-                    name="holderName"
-                    placeholder="John Michael Smith"
-                    value={formData.holderName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <TabsContent value="details">
+                  <form className="space-y-5">
+                    {/* Certificate Number */}
+                    <div className="space-y-2">
+                      <Label>Certificate Number</Label>
+                      <div className="flex gap-3">
+                        <Input
+                          name="certificateNumber"
+                          placeholder="FIBQ-XXXX-XXXX"
+                          value={formData.certificateNumber}
+                          onChange={handleChange}
+                          className="font-mono"
+                        />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => handleAutoGenerate("certificateNumber")}
+                        >
+                          Generate
+                        </Button>
+                      </div>
+                    </div>
 
-                {/* Certificate Title */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">
-                    <Award className="mr-2 inline-block h-4 w-4" />
-                    Certificate Title / Course Name
-                  </label>
-                  <Input
-                    name="certificateTitle"
-                    placeholder="Advanced Web Development"
-                    value={formData.certificateTitle}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                    {/* Trainee Name */}
+                    <div className="space-y-2">
+                      <Label>
+                        <User className="mr-2 inline-block h-4 w-4" />
+                        Trainee Full Name
+                      </Label>
+                      <Input
+                        name="traineeName"
+                        placeholder="e.g., Greta Mae Evans"
+                        value={formData.traineeName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
 
-                <div className="grid gap-6 sm:grid-cols-2">
-                  {/* Grade */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      Grade / Result
-                    </label>
-                    <Select
-                      value={formData.grade}
-                      onValueChange={(value) =>
-                        setFormData((prev) => ({ ...prev, grade: value }))
+                    {/* Training Program */}
+                    <div className="space-y-2">
+                      <Label>
+                        <Award className="mr-2 inline-block h-4 w-4" />
+                        Training Program Name
+                      </Label>
+                      <Input
+                        name="trainingProgramName"
+                        placeholder="e.g., Quality Management Systems (ISO 9001)"
+                        value={formData.trainingProgramName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    {/* Certificate Title/Description */}
+                    <div className="space-y-2">
+                      <Label>Certificate Title / Description</Label>
+                      <Textarea
+                        name="certificateTitle"
+                        placeholder="This certificate is proudly presented to..."
+                        value={formData.certificateTitle}
+                        onChange={handleChange}
+                        rows={3}
+                        className="resize-none"
+                      />
+                    </div>
+
+                    {/* ATC Code */}
+                    <div className="space-y-2">
+                      <Label>ATC Code (Accredited Training Center)</Label>
+                      <div className="flex gap-3">
+                        <Input
+                          name="atcCode"
+                          placeholder="ATC-XXXX"
+                          value={formData.atcCode}
+                          onChange={handleChange}
+                          className="font-mono"
+                        />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => handleAutoGenerate("atcCode")}
+                        >
+                          Generate
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {/* Date of Issue */}
+                      <div className="space-y-2">
+                        <Label>
+                          <Calendar className="mr-2 inline-block h-4 w-4" />
+                          Date of Issue
+                        </Label>
+                        <Input
+                          name="dateOfIssue"
+                          type="date"
+                          value={formData.dateOfIssue}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+
+                      {/* Place of Issue */}
+                      <div className="space-y-2">
+                        <Label>
+                          <MapPin className="mr-2 inline-block h-4 w-4" />
+                          Place of Issue
+                        </Label>
+                        <Input
+                          name="placeOfIssue"
+                          placeholder="e.g., French Republic"
+                          value={formData.placeOfIssue}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="issuer">
+                  <form className="space-y-5">
+                    {/* Chairperson Name */}
+                    <div className="space-y-2">
+                      <Label>Chairperson / Signatory Name</Label>
+                      <Input
+                        name="chairpersonName"
+                        placeholder="e.g., Dr. Marie Laurent"
+                        value={formData.chairpersonName}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    {/* Chairperson Title */}
+                    <div className="space-y-2">
+                      <Label>Chairperson Title</Label>
+                      <Input
+                        name="chairpersonTitle"
+                        placeholder="e.g., Chairperson of the Accreditation Board"
+                        value={formData.chairpersonTitle}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    {/* Legal Disclaimer */}
+                    <div className="space-y-2">
+                      <Label>Legal Disclaimer</Label>
+                      <Textarea
+                        name="legalDisclaimer"
+                        placeholder="Issued by a private accreditation body..."
+                        value={formData.legalDisclaimer}
+                        onChange={handleChange}
+                        rows={3}
+                        className="resize-none"
+                      />
+                    </div>
+
+                    {/* Options */}
+                    <div className="space-y-4 pt-4 border-t border-border">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label>Show Official Seal</Label>
+                          <p className="text-xs text-muted-foreground">
+                            Display embossed seal on certificate
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.showSeal}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({ ...prev, showSeal: checked }))
+                          }
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label>Include QR Code</Label>
+                          <p className="text-xs text-muted-foreground">
+                            QR code for online verification
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.showQRCode}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({ ...prev, showQRCode: checked }))
+                          }
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="template">
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Choose a template design for your certificate.
+                    </p>
+                    <TemplateSelector
+                      selectedTemplateId={formData.templateId || "classic-gold"}
+                      onSelect={(template) =>
+                        setFormData((prev) => ({ ...prev, templateId: template.id }))
                       }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select grade" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="distinction">Distinction</SelectItem>
-                        <SelectItem value="merit">Merit</SelectItem>
-                        <SelectItem value="pass">Pass</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Issue Date */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      <Calendar className="mr-2 inline-block h-4 w-4" />
-                      Issue Date
-                    </label>
-                    <Input
-                      name="issueDate"
-                      type="date"
-                      value={formData.issueDate}
-                      onChange={handleChange}
-                      required
                     />
                   </div>
-                </div>
+                </TabsContent>
+              </Tabs>
 
-                <div className="flex gap-4 pt-4">
-                  <Button
-                    type="submit"
-                    variant="gold"
-                    size="lg"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      "Creating..."
-                    ) : (
-                      <>
-                        <Save className="mr-2 h-4 w-4" />
-                        Create Certificate
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => navigate("/admin/certificates")}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 pt-6 mt-6 border-t border-border">
+                <Button
+                  onClick={handleSubmit}
+                  variant="gold"
+                  size="lg"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    "Creating..."
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Certificate
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  onClick={() => navigate("/admin/certificates")}
+                >
+                  Cancel
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Preview */}
+        {/* Preview Section */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
+          className="space-y-4"
         >
-          <Card variant="gold" className="sticky top-24">
-            <CardHeader>
-              <CardTitle className="text-lg">Live Preview</CardTitle>
+          <Card variant="default" className="sticky top-4">
+            <CardHeader className="flex flex-row items-center justify-between pb-4">
+              <div>
+                <CardTitle className="text-lg">Live Preview</CardTitle>
+                <CardDescription>Certificate updates as you type</CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportImage}
+                  disabled={isExporting}
+                >
+                  <FileImage className="mr-2 h-4 w-4" />
+                  PNG
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  PDF
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="rounded-lg border border-border bg-card p-6 text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent">
-                  <Award className="h-8 w-8 text-secondary" />
-                </div>
-                <p className="font-mono text-xs text-muted-foreground">
-                  {previewCertNumber}
-                </p>
-                <h3 className="mt-2 font-heading text-lg font-bold text-foreground">
-                  {formData.holderName || "Certificate Holder Name"}
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {formData.certificateTitle || "Certificate Title"}
-                </p>
-                {formData.grade && (
-                  <p className="mt-2 text-sm font-medium capitalize text-secondary">
-                    {formData.grade}
-                  </p>
-                )}
-                <p className="mt-2 text-xs text-muted-foreground">
-                  {formData.issueDate
-                    ? new Date(formData.issueDate).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                    : "Issue Date"}
-                </p>
-
-                {/* QR Code */}
-                <div className="mx-auto mt-6 flex h-24 w-24 items-center justify-center rounded-lg bg-card">
-                  <QRCodeSVG
-                    value={`${window.location.origin}/verify?number=${previewCertNumber}`}
-                    size={80}
-                    level="M"
-                  />
-                </div>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Scan to verify
-                </p>
+              <div
+                ref={certificateRef}
+                className="overflow-auto rounded-lg border border-border bg-muted/30 p-4"
+                style={{ maxHeight: "70vh" }}
+              >
+                <CertificatePreview
+                  data={formData}
+                  template={defaultTemplates.find((t) => t.id === formData.templateId)}
+                  scale={0.6}
+                />
               </div>
-
               <p className="mt-4 text-center text-xs text-muted-foreground">
-                This is a simplified preview. The final certificate will use your 
-                selected template design.
+                Export at full resolution for printing. Preview shown at 60% scale.
               </p>
             </CardContent>
           </Card>

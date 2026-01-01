@@ -5,6 +5,7 @@ import {
   Home,
   LogOut,
   Menu,
+  Palette,
   Plus,
   Settings,
   X,
@@ -18,6 +19,7 @@ const sidebarLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: Home },
   { href: "/admin/certificates", label: "All Certificates", icon: FileText },
   { href: "/admin/certificates/new", label: "Create Certificate", icon: Plus },
+  { href: "/admin/templates", label: "Templates", icon: Palette },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
