@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Award, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import fibqLogo from "@/assets/fibq-logo.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -21,15 +22,13 @@ export function Header() {
       <div className="container-page flex h-16 items-center justify-between md:h-20">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-md">
-            <Award className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img src={fibqLogo} alt="FIBQ Logo" className="h-12 w-auto" />
           <div className="flex flex-col">
             <span className="font-heading text-lg font-bold text-foreground md:text-xl">
-              CertifyPro
+              FIBQ
             </span>
             <span className="hidden text-xs text-muted-foreground sm:block">
-              Digital Verification
+              French International Board for Quality
             </span>
           </div>
         </Link>
