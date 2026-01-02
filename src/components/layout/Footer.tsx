@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Award, Mail, MapPin, Phone } from "lucide-react";
+import fibqLogo from "@/assets/fibq-logo.png";
 
 export function Footer() {
   return (
@@ -9,12 +10,10 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary shadow-gold">
-                <Award className="h-5 w-5 text-secondary-foreground" />
-              </div>
+              <img src={fibqLogo} alt="FIBQ Logo" className="h-12 w-auto" />
               <div className="flex flex-col">
-                <span className="font-heading text-xl font-bold">CertifyPro</span>
-                <span className="text-xs text-primary-foreground/70">Digital Verification</span>
+                <span className="font-heading text-xl font-bold">FIBQ</span>
+                <span className="text-xs text-primary-foreground/70">French International Board for Quality</span>
               </div>
             </Link>
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
@@ -49,7 +48,7 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 text-sm text-primary-foreground/70">
                 <Mail className="h-4 w-4 text-secondary" />
-                <span>support@certifypro.com</span>
+                <span>contact@fibq.org</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-primary-foreground/70">
                 <Phone className="h-4 w-4 text-secondary" />
@@ -82,7 +81,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/10 pt-8 md:flex-row">
           <p className="text-sm text-primary-foreground/60">
-            © {new Date().getFullYear()} CertifyPro. All rights reserved.
+            © {new Date().getFullYear()} FIBQ. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link to="#" className="text-sm text-primary-foreground/60 transition-colors hover:text-secondary">
