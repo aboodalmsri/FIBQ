@@ -121,6 +121,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          status: string
           updated_at: string
           user_id: string
         }
@@ -129,6 +130,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          status?: string
           updated_at?: string
           user_id: string
         }
@@ -137,6 +139,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          status?: string
           updated_at?: string
           user_id?: string
         }
@@ -175,6 +178,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"

@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CertificatesListPage from "./pages/admin/CertificatesListPage";
 import CreateCertificatePage from "./pages/admin/CreateCertificatePage";
 import TemplatesPage from "./pages/admin/TemplatesPage";
+import AdminManagementPage from "./pages/admin/AdminManagementPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="certificates" element={<CertificatesListPage />} />
               <Route path="certificates/new" element={<CreateCertificatePage />} />
               <Route path="templates" element={<TemplatesPage />} />
+              <Route path="admins" element={<AdminManagementPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
