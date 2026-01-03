@@ -6,63 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CertificatePreview } from "@/components/certificate/CertificatePreview";
-import { CertificateData, defaultTemplates, isValidCertificateNumber } from "@/types/certificate";
+import { CertificateData, CertificateTemplate } from "@/types/certificate";
 import { useCertificateExport } from "@/hooks/useCertificateExport";
-
-// Mock certificate data for demonstration with FIBQ format
-const mockCertificates: Record<string, CertificateData> = {
-  "FIBQ-A1B2-C3D4": {
-    certificateNumber: "FIBQ-A1B2-C3D4",
-    traineeName: "John Michael Smith",
-    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
-    trainingProgramName: "Quality Management Systems (ISO 9001)",
-    atcCode: "ATC-5678",
-    dateOfIssue: "2024-06-15",
-    placeOfIssue: "French Republic",
-    chairpersonName: "Dr. Marie Laurent",
-    chairpersonTitle: "Chairperson of the Accreditation Board",
-    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
-    showSeal: true,
-    showQRCode: true,
-    templateId: "classic-gold",
-    status: "valid",
-    certificateType: "trainee",
-  },
-  "FIBQ-X9Y8-Z7W6": {
-    certificateNumber: "FIBQ-X9Y8-Z7W6",
-    traineeName: "Sarah Jane Williams",
-    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
-    trainingProgramName: "Digital Marketing Fundamentals",
-    atcCode: "ATC-1234",
-    dateOfIssue: "2024-08-20",
-    placeOfIssue: "French Republic",
-    chairpersonName: "Dr. Marie Laurent",
-    chairpersonTitle: "Chairperson of the Accreditation Board",
-    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
-    showSeal: true,
-    showQRCode: true,
-    templateId: "modern-navy",
-    status: "valid",
-    certificateType: "trainee",
-  },
-  "FIBQ-E5F6-G7H8": {
-    certificateNumber: "FIBQ-E5F6-G7H8",
-    traineeName: "Robert Brown",
-    certificateTitle: "This certificate is proudly presented for successfully completing the accredited training program",
-    trainingProgramName: "Project Management Professional",
-    atcCode: "ATC-9012",
-    dateOfIssue: "2023-03-10",
-    placeOfIssue: "French Republic",
-    chairpersonName: "Dr. Marie Laurent",
-    chairpersonTitle: "Chairperson of the Accreditation Board",
-    legalDisclaimer: "Issued by a private accreditation body. Validity subject to official verification.",
-    showSeal: true,
-    showQRCode: true,
-    templateId: "ornate-traditional",
-    status: "expired",
-    certificateType: "trainer",
-  },
-};
+import { supabase } from "@/integrations/supabase/client";
 
 export default function VerifyPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -71,6 +17,7 @@ export default function VerifyPage() {
   const [searchResult, setSearchResult] = useState<{
     found: boolean;
     certificate?: CertificateData;
+    template?: CertificateTemplate;
   } | null>(null);
   
   const certificateRef = useRef<HTMLDivElement>(null);
@@ -90,14 +37,91 @@ export default function VerifyPage() {
     setIsSearching(true);
     setSearchResult(null);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Query the database for the certificate
+      const { data: certData, error: certError } = await supabase
+        .from("certificates")
+        .select("*")
+        .eq("certificate_number", certNumber.trim().toUpperCase())
+        .maybeSingle();
 
-    const certificate = mockCertificates[certNumber.trim().toUpperCase()];
-    setSearchResult({
-      found: !!certificate,
-      certificate,
-    });
+      if (certError) {
+        console.error("Error fetching certificate:", certError);
+        setSearchResult({ found: false });
+        setSearchParams({ number: certNumber.trim() });
+        setIsSearching(false);
+        return;
+      }
+
+      if (!certData) {
+        setSearchResult({ found: false });
+        setSearchParams({ number: certNumber.trim() });
+        setIsSearching(false);
+        return;
+      }
+
+      // Fetch the template if available
+      let template: CertificateTemplate | undefined;
+      if (certData.template_id) {
+        const { data: templateData } = await supabase
+          .from("certificate_templates")
+          .select("*")
+          .eq("id", certData.template_id)
+          .maybeSingle();
+
+        if (templateData) {
+          template = {
+            id: templateData.id,
+            name: templateData.name,
+            thumbnailUrl: "",
+            backgroundColor: templateData.background_color,
+            backgroundImage: templateData.background_image || undefined,
+            borderStyle: templateData.border_style as CertificateTemplate["borderStyle"],
+            accentColor: templateData.accent_color,
+            showSeal: true,
+            showQRCode: true,
+            width: 800,
+            height: 566,
+            elements: Array.isArray(templateData.elements) ? (templateData.elements as unknown as CertificateTemplate["elements"]) : [],
+          };
+        }
+      }
+
+      // Map database record to CertificateData format
+      const metadata = certData.metadata as Record<string, unknown> || {};
+      const certificate: CertificateData = {
+        id: certData.id,
+        certificateNumber: certData.certificate_number,
+        traineeName: certData.trainee_name,
+        certificateTitle: (metadata.certificateTitle as string) || "This certificate is proudly presented for successfully completing the accredited training program",
+        trainingProgramName: certData.training_program,
+        atcCode: (metadata.atcCode as string) || "",
+        dateOfIssue: certData.issue_date,
+        placeOfIssue: (metadata.placeOfIssue as string) || "French Republic",
+        chairpersonName: (metadata.chairpersonName as string) || "Dr. Marie Laurent",
+        chairpersonTitle: (metadata.chairpersonTitle as string) || "Chairperson of the Accreditation Board",
+        legalDisclaimer: (metadata.legalDisclaimer as string) || "Issued by a private accreditation body. Validity subject to official verification.",
+        showSeal: (metadata.showSeal as boolean) ?? true,
+        showQRCode: (metadata.showQRCode as boolean) ?? true,
+        templateId: certData.template_id || "",
+        status: certData.status as CertificateData["status"],
+        certificateType: (metadata.certificateType as CertificateData["certificateType"]) || "trainee",
+        traineePhoto: metadata.traineePhoto as string | undefined,
+        centerName: metadata.centerName as string | undefined,
+        centerLogo: metadata.centerLogo as string | undefined,
+        trainerName: metadata.trainerName as string | undefined,
+        trainerPhoto: metadata.trainerPhoto as string | undefined,
+      };
+
+      setSearchResult({
+        found: true,
+        certificate,
+        template,
+      });
+    } catch (error) {
+      console.error("Error during certificate search:", error);
+      setSearchResult({ found: false });
+    }
 
     setSearchParams({ number: certNumber.trim() });
     setIsSearching(false);
@@ -273,7 +297,7 @@ export default function VerifyPage() {
                       >
                         <CertificatePreview
                           data={searchResult.certificate}
-                          template={defaultTemplates.find((t) => t.id === searchResult.certificate?.templateId)}
+                          template={searchResult.template}
                           scale={0.75}
                         />
                       </div>
@@ -335,13 +359,14 @@ export default function VerifyPage() {
                   </p>
                   <div className="rounded-lg bg-muted p-4 text-left">
                     <p className="text-sm font-medium text-foreground">
-                      Demo Certificate Numbers:
+                      Certificate Number Format:
                     </p>
-                    <ul className="mt-2 space-y-1 font-mono text-sm text-muted-foreground">
-                      <li>• FIBQ-A1B2-C3D4 (Valid - Trainee)</li>
-                      <li>• FIBQ-X9Y8-Z7W6 (Valid - Trainee)</li>
-                      <li>• FIBQ-E5F6-G7H8 (Expired - Trainer)</li>
-                    </ul>
+                    <p className="mt-2 font-mono text-sm text-muted-foreground">
+                      FIBQ-XXXX-XXXX
+                    </p>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Enter the certificate number exactly as it appears on your certificate.
+                    </p>
                   </div>
                 </div>
               </Card>
