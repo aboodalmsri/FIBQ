@@ -10,7 +10,9 @@ import {
   Trash2, 
   Plus,
   Move,
-  Copy
+  Copy,
+  Upload,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +20,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { TemplateElement, CertificateTemplate, availablePlaceholders, defaultTemplateElements } from "@/types/certificate";
+import { TemplateElement, CertificateTemplate, availablePlaceholders, imagePlaceholders, defaultTemplateElements } from "@/types/certificate";
 import { cn } from "@/lib/utils";
+import fibqLogo from "@/assets/fibq-logo.png";
 
 interface TemplateEditorProps {
   template: CertificateTemplate;
@@ -260,16 +263,20 @@ export function TemplateEditor({ template, onUpdate }: TemplateEditorProps) {
               height: `${element.height}%`,
             }}
             className={cn(
-              "border-2 border-dashed rounded-lg flex items-center justify-center bg-muted/30",
+              "border-2 border-dashed rounded-lg flex items-center justify-center bg-muted/30 overflow-hidden",
               isSelected && "ring-2 ring-blue-500 ring-offset-2"
             )}
             onClick={() => setSelectedElementId(element.id)}
             onMouseDown={(e) => handleDrag(element.id, e)}
           >
-            <div className="text-center text-muted-foreground text-xs">
-              <Award className="h-6 w-6 mx-auto mb-1" />
-              <span>Logo</span>
-            </div>
+            {element.placeholder === "fibqLogo" ? (
+              <img src={fibqLogo} alt="FIBQ Logo" className="max-w-full max-h-full object-contain p-1" />
+            ) : (
+              <div className="text-center text-muted-foreground text-xs">
+                <Award className="h-6 w-6 mx-auto mb-1" />
+                <span>{element.placeholder || "Logo"}</span>
+              </div>
+            )}
           </div>
         );
 
@@ -403,12 +410,56 @@ export function TemplateEditor({ template, onUpdate }: TemplateEditorProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Background Image URL</Label>
-              <Input
-                placeholder="https://..."
-                value={template.backgroundImage || ""}
-                onChange={(e) => onUpdate({ ...template, backgroundImage: e.target.value })}
-              />
+              <Label>Background Image</Label>
+              <div className="space-y-2">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  id="bg-image-upload"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        onUpdate({ ...template, backgroundImage: event.target?.result as string });
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+                {template.backgroundImage ? (
+                  <div className="relative">
+                    <img 
+                      src={template.backgroundImage} 
+                      alt="Background" 
+                      className="w-full h-20 object-cover rounded-md border"
+                    />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-1 right-1 h-6 w-6"
+                      onClick={() => onUpdate({ ...template, backgroundImage: undefined })}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="bg-image-upload"
+                    className="flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                  >
+                    <Upload className="h-6 w-6 text-muted-foreground mb-1" />
+                    <span className="text-xs text-muted-foreground">Upload Background</span>
+                  </label>
+                )}
+                <p className="text-xs text-muted-foreground">Or use URL:</p>
+                <Input
+                  placeholder="https://..."
+                  value={typeof template.backgroundImage === 'string' && template.backgroundImage.startsWith('http') ? template.backgroundImage : ""}
+                  onChange={(e) => onUpdate({ ...template, backgroundImage: e.target.value })}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -593,9 +644,32 @@ export function TemplateEditor({ template, onUpdate }: TemplateEditorProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="traineePhoto">Trainee/Trainer Photo</SelectItem>
-                        <SelectItem value="centerLogo">Center Logo</SelectItem>
-                        <SelectItem value="customImage">Custom Image</SelectItem>
+                        {imagePlaceholders.filter(p => p.key !== "fibqLogo").map((p) => (
+                          <SelectItem key={p.key} value={p.key}>
+                            {p.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {selectedElement.type === "logo" && (
+                  <div className="space-y-2">
+                    <Label>Logo Type</Label>
+                    <Select
+                      value={selectedElement.placeholder || "fibqLogo"}
+                      onValueChange={(value) => updateElement(selectedElement.id, { placeholder: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {imagePlaceholders.map((p) => (
+                          <SelectItem key={p.key} value={p.key}>
+                            {p.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import {
-  Award,
   FileText,
   Home,
   LogOut,
@@ -14,6 +13,7 @@ import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import fibqLogo from "@/assets/fibq-logo.png";
 
 const sidebarLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: Home },
@@ -38,12 +38,10 @@ export default function AdminLayout() {
       <aside className="hidden w-64 flex-col border-r border-border bg-sidebar lg:flex">
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary">
-            <Award className="h-5 w-5 text-sidebar-primary-foreground" />
-          </div>
+          <img src={fibqLogo} alt="FIBQ" className="h-9 w-9 object-contain" />
           <div>
             <span className="font-heading text-lg font-bold text-sidebar-foreground">
-              CertifyPro
+              FIBQ
             </span>
             <span className="block text-xs text-sidebar-foreground/60">Admin Panel</span>
           </div>
@@ -92,9 +90,7 @@ export default function AdminLayout() {
         {/* Mobile Header */}
         <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Award className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img src={fibqLogo} alt="FIBQ" className="h-9 w-9 object-contain" />
             <span className="font-heading font-bold text-foreground">Admin</span>
           </div>
           <Button
@@ -123,11 +119,9 @@ export default function AdminLayout() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary">
-                  <Award className="h-5 w-5 text-sidebar-primary-foreground" />
-                </div>
+                <img src={fibqLogo} alt="FIBQ" className="h-9 w-9 object-contain" />
                 <span className="font-heading text-lg font-bold text-sidebar-foreground">
-                  Admin Panel
+                  FIBQ Admin
                 </span>
               </div>
 

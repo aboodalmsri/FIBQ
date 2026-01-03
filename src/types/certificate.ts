@@ -83,13 +83,29 @@ export const availablePlaceholders = [
   { key: "certificateTypeLabel", label: "Certificate Type Label" },
 ];
 
+// Image placeholders for logos
+export const imagePlaceholders = [
+  { key: "fibqLogo", label: "FIBQ Logo" },
+  { key: "traineePhoto", label: "Trainee/Trainer Photo" },
+  { key: "centerLogo", label: "Center Logo" },
+];
+
 // Default elements for a new template
 export const defaultTemplateElements: TemplateElement[] = [
+  {
+    id: "fibq-logo",
+    type: "logo",
+    x: 50,
+    y: 6,
+    width: 10,
+    height: 8,
+    placeholder: "fibqLogo",
+  },
   {
     id: "header",
     type: "text",
     x: 50,
-    y: 8,
+    y: 14,
     width: 80,
     height: 5,
     content: "CERTIFICATE",
