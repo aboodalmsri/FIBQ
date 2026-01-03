@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import fibqLogo from "@/assets/fibq-logo.png";
 
 const sidebarLinks = [
@@ -26,9 +27,11 @@ const sidebarLinks = [
 export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { signOut, user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await signOut();
     navigate("/admin/login");
   };
 

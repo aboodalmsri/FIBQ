@@ -1,25 +1,34 @@
 import { motion } from "framer-motion";
-import { Check, Edit, Eye, Plus, Trash2, Upload, Palette, Layout } from "lucide-react";
+import { Check, Layout, Plus, Trash2, Upload, Palette, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { CertificateTemplate, defaultTemplates, defaultTemplateElements } from "@/types/certificate";
 import { TemplateEditor } from "@/components/certificate/TemplateEditor";
+import { useTemplates } from "@/hooks/useTemplates";
 import { cn } from "@/lib/utils";
 
 export default function TemplatesPage() {
   const { toast } = useToast();
-  const [templates, setTemplates] = useState<CertificateTemplate[]>(defaultTemplates);
-  const [selectedTemplate, setSelectedTemplate] = useState<string>(defaultTemplates[0].id);
+  const {
+    templates,
+    isLoading,
+    selectedTemplateId,
+    setSelectedTemplateId,
+    createTemplate,
+    updateTemplate,
+    deleteTemplate,
+  } = useTemplates();
+  
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<CertificateTemplate | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [newTemplate, setNewTemplate] = useState({
     name: "",
     accentColor: "#C9A227",
@@ -27,7 +36,7 @@ export default function TemplatesPage() {
     borderStyle: "classic" as CertificateTemplate["borderStyle"],
   });
 
-  const handleCreateTemplate = () => {
+  const handleCreateTemplate = async () => {
     if (!newTemplate.name.trim()) {
       toast({
         title: "Name Required",
@@ -37,8 +46,7 @@ export default function TemplatesPage() {
       return;
     }
 
-    const template: CertificateTemplate = {
-      id: `custom-${Date.now()}`,
+    const template: Omit<CertificateTemplate, "id"> = {
       name: newTemplate.name,
       thumbnailUrl: "",
       backgroundColor: newTemplate.backgroundColor,
@@ -55,72 +63,48 @@ export default function TemplatesPage() {
       })),
     };
 
-    setTemplates([...templates, template]);
-    setIsCreateDialogOpen(false);
-    setNewTemplate({ 
-      name: "", 
-      accentColor: "#C9A227", 
-      backgroundColor: "#FFFEF7",
-      borderStyle: "classic",
-    });
-
-    toast({
-      title: "Template Created!",
-      description: `${template.name} has been added. Click Edit to customize the layout.`,
-    });
+    const created = await createTemplate(template);
+    if (created) {
+      setIsCreateDialogOpen(false);
+      setNewTemplate({
+        name: "",
+        accentColor: "#C9A227",
+        backgroundColor: "#FFFEF7",
+        borderStyle: "classic",
+      });
+    }
   };
 
   const handleUpdateTemplate = (updatedTemplate: CertificateTemplate) => {
-    setTemplates(templates.map(t => 
-      t.id === updatedTemplate.id ? updatedTemplate : t
-    ));
     setEditingTemplate(updatedTemplate);
   };
 
-  const handleSaveTemplate = () => {
+  const handleSaveTemplate = async () => {
     if (editingTemplate) {
-      setTemplates(templates.map(t => 
-        t.id === editingTemplate.id ? editingTemplate : t
-      ));
+      await updateTemplate(editingTemplate);
+      toast({
+        title: "Template Saved!",
+        description: "Your changes have been saved.",
+      });
     }
     setEditingTemplate(null);
-    toast({
-      title: "Template Saved!",
-      description: "Your changes have been saved.",
-    });
   };
 
-  const handleDeleteTemplate = (id: string) => {
-    const template = templates.find(t => t.id === id);
-    if (!template) return;
-
-    if (defaultTemplates.some(t => t.id === id)) {
-      toast({
-        title: "Cannot Delete",
-        description: "Default templates cannot be deleted.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setTemplates(templates.filter(t => t.id !== id));
-    if (selectedTemplate === id) {
-      setSelectedTemplate(templates[0]?.id || "");
-    }
-
-    toast({
-      title: "Template Deleted",
-      description: `${template.name} has been removed.`,
-    });
+  const handleDeleteTemplate = async (id: string) => {
+    setIsDeleting(id);
+    await deleteTemplate(id);
+    setIsDeleting(null);
   };
 
   const handleSetDefault = (id: string) => {
-    setSelectedTemplate(id);
+    setSelectedTemplateId(id);
     toast({
       title: "Default Template Set",
       description: "This template will be used for new certificates.",
     });
   };
+
+  const isSystemTemplate = (id: string) => defaultTemplates.some(t => t.id === id);
 
   // If editing, show the full template editor
   if (editingTemplate) {
@@ -149,6 +133,14 @@ export default function TemplatesPage() {
           template={editingTemplate}
           onUpdate={handleUpdateTemplate}
         />
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -313,14 +305,14 @@ export default function TemplatesPage() {
             <Card
               className={cn(
                 "relative overflow-hidden transition-all hover:shadow-lg cursor-pointer",
-                selectedTemplate === template.id && "ring-2 ring-secondary"
+                selectedTemplateId === template.id && "ring-2 ring-secondary"
               )}
               onClick={() => handleSetDefault(template.id)}
             >
               {/* Template Preview */}
               <div
                 className="h-40 relative"
-                style={{ 
+                style={{
                   backgroundColor: template.backgroundColor,
                   backgroundImage: template.backgroundImage ? `url(${template.backgroundImage})` : undefined,
                   backgroundSize: "cover",
@@ -355,10 +347,16 @@ export default function TemplatesPage() {
                   </div>
                 </div>
 
-                {selectedTemplate === template.id && (
+                {selectedTemplateId === template.id && (
                   <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
                     <Check className="h-3 w-3" />
                     Default
+                  </div>
+                )}
+
+                {isSystemTemplate(template.id) && (
+                  <div className="absolute top-2 left-2 rounded-full bg-primary/80 px-2 py-1 text-xs font-medium text-primary-foreground">
+                    System
                   </div>
                 )}
               </div>
@@ -384,8 +382,8 @@ export default function TemplatesPage() {
                     <Layout className="mr-1 h-3 w-3" />
                     Edit Layout
                   </Button>
-                  
-                  {!defaultTemplates.some(t => t.id === template.id) && (
+
+                  {!isSystemTemplate(template.id) && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
@@ -393,8 +391,13 @@ export default function TemplatesPage() {
                           size="sm"
                           className="text-destructive hover:text-destructive"
                           onClick={(e) => e.stopPropagation()}
+                          disabled={isDeleting === template.id}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          {isDeleting === template.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -449,15 +452,43 @@ export default function TemplatesPage() {
 
       {/* Instructions */}
       <Card className="mt-8">
-        <CardHeader>
-          <CardTitle className="text-lg">How to Use Templates</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
-          <p>1. <strong>Create a template</strong> - Start with base colors and border style</p>
-          <p>2. <strong>Edit layout</strong> - Click "Edit Layout" to drag and position all elements</p>
-          <p>3. <strong>Map data fields</strong> - Assign placeholders like name, date, certificate number to text elements</p>
-          <p>4. <strong>Add images</strong> - Include spaces for trainee photos or center logos</p>
-          <p>5. <strong>Set as default</strong> - Click a template to use it for new certificates</p>
+        <CardContent className="p-6">
+          <h2 className="font-heading text-lg font-semibold mb-4">How to Use Templates</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground font-bold">
+                1
+              </div>
+              <div>
+                <h3 className="font-medium">Create or Select</h3>
+                <p className="text-sm text-muted-foreground">
+                  Choose a default template or create a custom one
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground font-bold">
+                2
+              </div>
+              <div>
+                <h3 className="font-medium">Customize Layout</h3>
+                <p className="text-sm text-muted-foreground">
+                  Edit text, logos, and element positions
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground font-bold">
+                3
+              </div>
+              <div>
+                <h3 className="font-medium">Generate Certificates</h3>
+                <p className="text-sm text-muted-foreground">
+                  Use templates to create professional certificates
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
