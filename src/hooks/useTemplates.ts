@@ -52,9 +52,9 @@ function templateToDb(template: CertificateTemplate, userId?: string) {
 
 export function useTemplates() {
   const { toast } = useToast();
-  const [templates, setTemplates] = useState<CertificateTemplate[]>(defaultTemplates);
+  const [templates, setTemplates] = useState<CertificateTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(defaultTemplates[0].id);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
 
   useEffect(() => {
     fetchTemplates();
@@ -70,14 +70,19 @@ export function useTemplates() {
     
     if (error) {
       console.error("Error fetching templates:", error);
-      // Fall back to default templates
-      setTemplates(defaultTemplates);
+      setTemplates([]);
     } else if (data && data.length > 0) {
       const dbTemplates = data.map(dbToTemplate);
-      // Combine with default system templates for display
-      setTemplates([...defaultTemplates, ...dbTemplates]);
+      setTemplates(dbTemplates);
+      // Set default selected template
+      const defaultTemplate = data.find(t => t.is_default);
+      if (defaultTemplate) {
+        setSelectedTemplateId(defaultTemplate.id);
+      } else if (dbTemplates.length > 0) {
+        setSelectedTemplateId(dbTemplates[0].id);
+      }
     } else {
-      setTemplates(defaultTemplates);
+      setTemplates([]);
     }
     
     setIsLoading(false);
@@ -116,13 +121,6 @@ export function useTemplates() {
   };
 
   const updateTemplate = async (template: CertificateTemplate) => {
-    // Check if it's a default template (not in DB)
-    if (defaultTemplates.some(t => t.id === template.id)) {
-      // Just update locally for default templates
-      setTemplates(prev => prev.map(t => t.id === template.id ? template : t));
-      return template;
-    }
-    
     const { error } = await supabase
       .from("certificate_templates")
       .update({
@@ -151,16 +149,6 @@ export function useTemplates() {
   };
 
   const deleteTemplate = async (id: string) => {
-    // Check if it's a default template
-    if (defaultTemplates.some(t => t.id === id)) {
-      toast({
-        title: "Cannot Delete",
-        description: "Default templates cannot be deleted.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
     const template = templates.find(t => t.id === id);
     
     const { error } = await supabase
@@ -181,7 +169,8 @@ export function useTemplates() {
     setTemplates(prev => prev.filter(t => t.id !== id));
     
     if (selectedTemplateId === id) {
-      setSelectedTemplateId(templates[0]?.id || defaultTemplates[0].id);
+      const remaining = templates.filter(t => t.id !== id);
+      setSelectedTemplateId(remaining[0]?.id || "");
     }
     
     toast({

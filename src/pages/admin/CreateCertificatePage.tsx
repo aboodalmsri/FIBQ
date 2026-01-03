@@ -14,7 +14,8 @@ import { useToast } from "@/hooks/use-toast";
 import { CertificatePreview } from "@/components/certificate/CertificatePreview";
 import { TemplateSelector } from "@/components/certificate/TemplateSelector";
 import { useCertificateExport } from "@/hooks/useCertificateExport";
-import { 
+import { supabase } from "@/integrations/supabase/client";
+import {
   CertificateData, 
   CertificateType,
   certificateTypeLabels,
@@ -51,15 +52,46 @@ export default function CreateCertificatePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const { error } = await supabase.from("certificates").insert({
+        certificate_number: formData.certificateNumber || "",
+        trainee_name: formData.traineeName || "",
+        training_program: formData.trainingProgramName || "",
+        training_center: formData.placeOfIssue || null,
+        template_id: formData.templateId || null,
+        issue_date: formData.dateOfIssue || new Date().toISOString().split("T")[0],
+        status: "active",
+        metadata: {
+          certificateTitle: formData.certificateTitle,
+          atcCode: formData.atcCode,
+          chairpersonName: formData.chairpersonName,
+          chairpersonTitle: formData.chairpersonTitle,
+          legalDisclaimer: formData.legalDisclaimer,
+          showSeal: formData.showSeal,
+          showQRCode: formData.showQRCode,
+          traineePhoto: formData.traineePhoto,
+          certificateType: formData.certificateType,
+        },
+      });
 
-    toast({
-      title: "Certificate Created!",
-      description: `Certificate ${formData.certificateNumber} has been created successfully.`,
-    });
+      if (error) throw error;
 
-    setIsSubmitting(false);
-    navigate("/admin/certificates");
+      toast({
+        title: "Certificate Created!",
+        description: `Certificate ${formData.certificateNumber} has been saved to the database.`,
+      });
+
+      navigate("/admin/certificates");
+    } catch (error) {
+      console.error("Error saving certificate:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save certificate. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

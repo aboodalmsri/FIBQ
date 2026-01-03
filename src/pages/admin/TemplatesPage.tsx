@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { CertificateTemplate, defaultTemplates, defaultTemplateElements } from "@/types/certificate";
+import { CertificateTemplate, defaultTemplateElements } from "@/types/certificate";
+import { supabase } from "@/integrations/supabase/client";
 import { TemplateEditor } from "@/components/certificate/TemplateEditor";
 import { useTemplates } from "@/hooks/useTemplates";
 import { cn } from "@/lib/utils";
@@ -96,12 +97,38 @@ export default function TemplatesPage() {
     setIsDeleting(null);
   };
 
-  const handleSelectTemplate = (id: string) => {
-    // Just select the template for preview/use, don't change any defaults
+  const handleSetAsDefault = async (id: string) => {
+    // First, unset all other templates as default
+    const { error: unsetError } = await supabase
+      .from("certificate_templates")
+      .update({ is_default: false })
+      .neq("id", id);
+    
+    if (unsetError) {
+      console.error("Error unsetting defaults:", unsetError);
+    }
+    
+    // Set this template as default
+    const { error } = await supabase
+      .from("certificate_templates")
+      .update({ is_default: true })
+      .eq("id", id);
+    
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to set default template.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setSelectedTemplateId(id);
+    toast({
+      title: "Default Updated",
+      description: "Template has been set as the default.",
+    });
   };
-
-  const isSystemTemplate = (id: string) => defaultTemplates.some(t => t.id === id);
 
   // If editing, show the full template editor
   if (editingTemplate) {
@@ -304,7 +331,7 @@ export default function TemplatesPage() {
                 "relative overflow-hidden transition-all hover:shadow-lg cursor-pointer",
                 selectedTemplateId === template.id && "ring-2 ring-secondary"
               )}
-              onClick={() => handleSelectTemplate(template.id)}
+              onClick={() => handleSetAsDefault(template.id)}
             >
               {/* Template Preview */}
               <div
@@ -350,12 +377,6 @@ export default function TemplatesPage() {
                     Default
                   </div>
                 )}
-
-                {isSystemTemplate(template.id) && (
-                  <div className="absolute top-2 left-2 rounded-full bg-primary/80 px-2 py-1 text-xs font-medium text-primary-foreground">
-                    System
-                  </div>
-                )}
               </div>
 
               <CardContent className="p-4">
@@ -380,42 +401,40 @@ export default function TemplatesPage() {
                     Edit Layout
                   </Button>
 
-                  {!isSystemTemplate(template.id) && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                          onClick={(e) => e.stopPropagation()}
-                          disabled={isDeleting === template.id}
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive"
+                        onClick={(e) => e.stopPropagation()}
+                        disabled={isDeleting === template.id}
+                      >
+                        {isDeleting === template.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Template?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete "{template.name}". This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteTemplate(template.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          {isDeleting === template.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Template?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently delete "{template.name}". This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeleteTemplate(template.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </CardContent>
             </Card>
