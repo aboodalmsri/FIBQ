@@ -14,13 +14,13 @@ import { useToast } from "@/hooks/use-toast";
 import { CertificatePreview } from "@/components/certificate/CertificatePreview";
 import { TemplateSelector } from "@/components/certificate/TemplateSelector";
 import { useCertificateExport } from "@/hooks/useCertificateExport";
+import { useTemplates } from "@/hooks/useTemplates";
 import { supabase } from "@/integrations/supabase/client";
 import {
   CertificateData, 
   CertificateType,
   certificateTypeLabels,
   defaultCertificateData, 
-  defaultTemplates,
   generateCertificateNumber,
   generateATCCode,
 } from "@/types/certificate";
@@ -30,6 +30,7 @@ export default function CreateCertificatePage() {
   const { toast } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const { exportToPDF, exportToImage, isExporting } = useCertificateExport();
+  const { templates } = useTemplates();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<Partial<CertificateData>>({
     ...defaultCertificateData,
@@ -507,7 +508,7 @@ export default function CreateCertificatePage() {
               >
                 <CertificatePreview
                   data={formData}
-                  template={defaultTemplates.find((t) => t.id === formData.templateId)}
+                  template={templates.find((t) => t.id === formData.templateId)}
                   scale={0.6}
                 />
               </div>
