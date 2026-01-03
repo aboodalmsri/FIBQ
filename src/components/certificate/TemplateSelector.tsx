@@ -1,7 +1,8 @@
-import { Check } from "lucide-react";
-import { CertificateTemplate, defaultTemplates } from "@/types/certificate";
+import { Check, Loader2 } from "lucide-react";
+import { CertificateTemplate } from "@/types/certificate";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import { useTemplates } from "@/hooks/useTemplates";
 
 interface TemplateSelectorProps {
   selectedTemplateId: string;
@@ -9,9 +10,19 @@ interface TemplateSelectorProps {
 }
 
 export function TemplateSelector({ selectedTemplateId, onSelect }: TemplateSelectorProps) {
+  const { templates, isLoading } = useTemplates();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-2 gap-4">
-      {defaultTemplates.map((template) => (
+      {templates.map((template) => (
         <Card
           key={template.id}
           className={cn(
