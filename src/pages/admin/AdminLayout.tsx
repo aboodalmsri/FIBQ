@@ -21,7 +21,7 @@ const sidebarLinks = [
   { href: "/admin/certificates", label: "All Certificates", icon: FileText },
   { href: "/admin/certificates/new", label: "Create Certificate", icon: Plus },
   { href: "/admin/templates", label: "Templates", icon: Palette },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/admins", label: "Manage Admins", icon: Settings },
 ];
 
 export default function AdminLayout() {
