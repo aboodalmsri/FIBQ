@@ -1,65 +1,55 @@
 import { motion } from "framer-motion";
-import { Award, Calendar, FileText, Plus, TrendingUp, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Award, Calendar, FileText, Plus, TrendingUp, Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const stats = [
-  {
-    title: "Total Certificates",
-    value: "1,234",
-    change: "+12%",
-    icon: FileText,
-    color: "bg-primary",
-  },
-  {
-    title: "This Month",
-    value: "56",
-    change: "+8%",
-    icon: Calendar,
-    color: "bg-secondary",
-  },
-  {
-    title: "Verifications Today",
-    value: "89",
-    change: "+23%",
-    icon: TrendingUp,
-    color: "bg-green-600",
-  },
-  {
-    title: "Active Templates",
-    value: "5",
-    change: "0%",
-    icon: Award,
-    color: "bg-purple-600",
-  },
-];
-
-const recentCertificates = [
-  {
-    id: "CERT-2024-003",
-    holder: "Emily Johnson",
-    title: "Data Science Fundamentals",
-    date: "2024-12-28",
-    status: "valid",
-  },
-  {
-    id: "CERT-2024-002",
-    holder: "Sarah Jane Williams",
-    title: "Digital Marketing Fundamentals",
-    date: "2024-08-20",
-    status: "valid",
-  },
-  {
-    id: "CERT-2024-001",
-    holder: "John Michael Smith",
-    title: "Advanced Web Development",
-    date: "2024-06-15",
-    status: "valid",
-  },
-];
+import { useCertificates } from "@/hooks/useCertificates";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+  const { certificates, isLoading, stats } = useCertificates();
+
+  const recentCertificates = certificates.slice(0, 5);
+
+  const statsData = [
+    {
+      title: "Total Certificates",
+      value: stats.total.toString(),
+      change: "",
+      icon: FileText,
+      color: "bg-primary",
+    },
+    {
+      title: "This Month",
+      value: stats.thisMonth.toString(),
+      change: "",
+      icon: Calendar,
+      color: "bg-secondary",
+    },
+    {
+      title: "Verifications Today",
+      value: "—",
+      change: "",
+      icon: TrendingUp,
+      color: "bg-green-600",
+    },
+    {
+      title: "Active Templates",
+      value: stats.activeTemplates.toString(),
+      change: "",
+      icon: Award,
+      color: "bg-purple-600",
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 md:p-8">
       {/* Header */}
@@ -80,7 +70,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
+        {statsData.map((stat, index) => (
           <motion.div
             key={stat.title}
             initial={{ opacity: 0, y: 20 }}
@@ -95,7 +85,6 @@ export default function AdminDashboard() {
                     <p className="mt-2 font-heading text-3xl font-bold text-foreground">
                       {stat.value}
                     </p>
-                    <p className="mt-1 text-sm text-green-600">{stat.change} from last month</p>
                   </div>
                   <div className={`rounded-xl p-3 ${stat.color}`}>
                     <stat.icon className="h-6 w-6 text-white" />
@@ -130,7 +119,7 @@ export default function AdminDashboard() {
                     </th>
                     <th className="pb-3 text-sm font-medium text-muted-foreground">Holder</th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground md:table-cell">
-                      Title
+                      Program
                     </th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground sm:table-cell">
                       Date
@@ -139,31 +128,45 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {recentCertificates.map((cert) => (
-                    <tr key={cert.id} className="hover:bg-muted/50">
-                      <td className="py-4">
-                        <span className="font-mono text-sm font-medium text-foreground">
-                          {cert.id}
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <span className="text-sm text-foreground">{cert.holder}</span>
-                      </td>
-                      <td className="hidden py-4 md:table-cell">
-                        <span className="text-sm text-muted-foreground">{cert.title}</span>
-                      </td>
-                      <td className="hidden py-4 sm:table-cell">
-                        <span className="text-sm text-muted-foreground">
-                          {new Date(cert.date).toLocaleDateString()}
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium capitalize text-green-800">
-                          {cert.status}
-                        </span>
+                  {recentCertificates.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="py-8 text-center text-muted-foreground">
+                        No certificates yet. Create your first certificate!
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    recentCertificates.map((cert) => (
+                      <tr key={cert.id} className="hover:bg-muted/50">
+                        <td className="py-4">
+                          <span className="font-mono text-sm font-medium text-foreground">
+                            {cert.certificate_number}
+                          </span>
+                        </td>
+                        <td className="py-4">
+                          <span className="text-sm text-foreground">{cert.trainee_name}</span>
+                        </td>
+                        <td className="hidden py-4 md:table-cell">
+                          <span className="text-sm text-muted-foreground">{cert.training_program}</span>
+                        </td>
+                        <td className="hidden py-4 sm:table-cell">
+                          <span className="text-sm text-muted-foreground">
+                            {new Date(cert.issue_date).toLocaleDateString()}
+                          </span>
+                        </td>
+                        <td className="py-4">
+                          <span className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${
+                            cert.status === "active" 
+                              ? "bg-green-100 text-green-800" 
+                              : cert.status === "expired"
+                              ? "bg-amber-100 text-amber-800"
+                              : "bg-red-100 text-red-800"
+                          }`}>
+                            {cert.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -181,7 +184,7 @@ export default function AdminDashboard() {
         <Card
           variant="feature"
           className="cursor-pointer p-6 transition-shadow hover:shadow-lg"
-          onClick={() => {}}
+          onClick={() => navigate("/admin/certificates/new")}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
@@ -197,7 +200,7 @@ export default function AdminDashboard() {
         <Card
           variant="feature"
           className="cursor-pointer p-6 transition-shadow hover:shadow-lg"
-          onClick={() => {}}
+          onClick={() => navigate("/admin/certificates")}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary">
@@ -213,11 +216,11 @@ export default function AdminDashboard() {
         <Card
           variant="feature"
           className="cursor-pointer p-6 transition-shadow hover:shadow-lg"
-          onClick={() => {}}
+          onClick={() => navigate("/admin/templates")}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600">
-              <Users className="h-6 w-6 text-white" />
+              <Award className="h-6 w-6 text-white" />
             </div>
             <div>
               <h3 className="font-heading font-semibold text-foreground">Templates</h3>

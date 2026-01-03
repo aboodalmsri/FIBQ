@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Edit, Eye, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
+import { Edit, Eye, Loader2, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,74 +11,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/hooks/use-toast";
-
-const mockCertificates = [
-  {
-    id: "CERT-2024-003",
-    holder: "Emily Johnson",
-    title: "Data Science Fundamentals",
-    grade: "Distinction",
-    date: "2024-12-28",
-    status: "valid",
-  },
-  {
-    id: "CERT-2024-002",
-    holder: "Sarah Jane Williams",
-    title: "Digital Marketing Fundamentals",
-    grade: "Merit",
-    date: "2024-08-20",
-    status: "valid",
-  },
-  {
-    id: "CERT-2024-001",
-    holder: "John Michael Smith",
-    title: "Advanced Web Development",
-    grade: "Distinction",
-    date: "2024-06-15",
-    status: "valid",
-  },
-  {
-    id: "CERT-2023-150",
-    holder: "Robert Brown",
-    title: "Project Management Professional",
-    grade: "Pass",
-    date: "2023-03-10",
-    status: "expired",
-  },
-  {
-    id: "CERT-2023-089",
-    holder: "Alice Chen",
-    title: "Cloud Computing Essentials",
-    grade: "Merit",
-    date: "2023-01-15",
-    status: "valid",
-  },
-];
+import { useCertificates } from "@/hooks/useCertificates";
 
 export default function CertificatesListPage() {
-  const { toast } = useToast();
+  const { certificates, isLoading, deleteCertificate } = useCertificates();
   const [searchQuery, setSearchQuery] = useState("");
-  const [certificates, setCertificates] = useState(mockCertificates);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filteredCertificates = certificates.filter(
     (cert) =>
-      cert.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cert.holder.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cert.title.toLowerCase().includes(searchQuery.toLowerCase())
+      cert.certificate_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cert.trainee_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cert.training_program.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleDelete = (id: string) => {
-    setCertificates(certificates.filter((cert) => cert.id !== id));
-    toast({
-      title: "Certificate Deleted",
-      description: `Certificate ${id} has been removed.`,
-    });
+  const handleDelete = async (id: string) => {
+    setDeletingId(id);
+    await deleteCertificate(id);
+    setDeletingId(null);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
+      case "active":
         return "bg-green-100 text-green-800";
       case "expired":
         return "bg-amber-100 text-amber-800";
@@ -88,6 +43,14 @@ export default function CertificatesListPage() {
         return "bg-muted text-muted-foreground";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 md:p-8">
@@ -117,7 +80,7 @@ export default function CertificatesListPage() {
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             variant="search"
-            placeholder="Search by certificate number, holder, or title..."
+            placeholder="Search by certificate number, holder, or program..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -147,10 +110,10 @@ export default function CertificatesListPage() {
                     </th>
                     <th className="pb-3 text-sm font-medium text-muted-foreground">Holder</th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground lg:table-cell">
-                      Title
+                      Program
                     </th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground md:table-cell">
-                      Grade
+                      Center
                     </th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground sm:table-cell">
                       Date
@@ -164,21 +127,21 @@ export default function CertificatesListPage() {
                     <tr key={cert.id} className="hover:bg-muted/50">
                       <td className="py-4">
                         <span className="font-mono text-sm font-medium text-foreground">
-                          {cert.id}
+                          {cert.certificate_number}
                         </span>
                       </td>
                       <td className="py-4">
-                        <span className="text-sm text-foreground">{cert.holder}</span>
+                        <span className="text-sm text-foreground">{cert.trainee_name}</span>
                       </td>
                       <td className="hidden py-4 lg:table-cell">
-                        <span className="text-sm text-muted-foreground">{cert.title}</span>
+                        <span className="text-sm text-muted-foreground">{cert.training_program}</span>
                       </td>
                       <td className="hidden py-4 md:table-cell">
-                        <span className="text-sm text-muted-foreground">{cert.grade}</span>
+                        <span className="text-sm text-muted-foreground">{cert.training_center || "—"}</span>
                       </td>
                       <td className="hidden py-4 sm:table-cell">
                         <span className="text-sm text-muted-foreground">
-                          {new Date(cert.date).toLocaleDateString()}
+                          {new Date(cert.issue_date).toLocaleDateString()}
                         </span>
                       </td>
                       <td className="py-4">
@@ -200,7 +163,7 @@ export default function CertificatesListPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem asChild>
                               <Link
-                                to={`/verify?number=${cert.id}`}
+                                to={`/verify?number=${cert.certificate_number}`}
                                 target="_blank"
                                 className="flex items-center gap-2"
                               >
@@ -215,8 +178,13 @@ export default function CertificatesListPage() {
                             <DropdownMenuItem
                               className="flex items-center gap-2 text-destructive"
                               onClick={() => handleDelete(cert.id)}
+                              disabled={deletingId === cert.id}
                             >
-                              <Trash2 className="h-4 w-4" />
+                              {deletingId === cert.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
                               Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -229,7 +197,12 @@ export default function CertificatesListPage() {
 
               {filteredCertificates.length === 0 && (
                 <div className="py-12 text-center">
-                  <p className="text-muted-foreground">No certificates found.</p>
+                  <p className="text-muted-foreground">
+                    {certificates.length === 0 
+                      ? "No certificates yet. Create your first certificate!"
+                      : "No certificates found matching your search."
+                    }
+                  </p>
                 </div>
               )}
             </div>

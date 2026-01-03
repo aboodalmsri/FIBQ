@@ -96,12 +96,9 @@ export default function TemplatesPage() {
     setIsDeleting(null);
   };
 
-  const handleSetDefault = (id: string) => {
+  const handleSelectTemplate = (id: string) => {
+    // Just select the template for preview/use, don't change any defaults
     setSelectedTemplateId(id);
-    toast({
-      title: "Default Template Set",
-      description: "This template will be used for new certificates.",
-    });
   };
 
   const isSystemTemplate = (id: string) => defaultTemplates.some(t => t.id === id);
@@ -307,7 +304,7 @@ export default function TemplatesPage() {
                 "relative overflow-hidden transition-all hover:shadow-lg cursor-pointer",
                 selectedTemplateId === template.id && "ring-2 ring-secondary"
               )}
-              onClick={() => handleSetDefault(template.id)}
+              onClick={() => handleSelectTemplate(template.id)}
             >
               {/* Template Preview */}
               <div
