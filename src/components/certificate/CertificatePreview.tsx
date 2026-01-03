@@ -3,6 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Award } from "lucide-react";
 import { CertificateData, CertificateTemplate, certificateTypeLabels, defaultTemplates } from "@/types/certificate";
 import { cn } from "@/lib/utils";
+import fibqLogo from "@/assets/fibq-logo.png";
 
 interface CertificatePreviewProps {
   data: Partial<CertificateData>;
@@ -77,6 +78,8 @@ export const CertificatePreview = forwardRef<HTMLDivElement, CertificatePreviewP
     // Get image URL for a placeholder
     const getImageValue = (placeholder?: string): string | undefined => {
       switch (placeholder) {
+        case "fibqLogo":
+          return fibqLogo;
         case "traineePhoto":
           return data.traineePhoto || data.trainerPhoto;
         case "centerLogo":
@@ -227,8 +230,11 @@ export const CertificatePreview = forwardRef<HTMLDivElement, CertificatePreviewP
         }
 
         case "logo": {
-          const logoUrl = data.centerLogo;
-          if (!logoUrl) return null;
+          const logoUrl = element.placeholder === "fibqLogo" 
+            ? fibqLogo 
+            : element.placeholder === "centerLogo" 
+              ? data.centerLogo 
+              : undefined;
           
           return (
             <div
@@ -239,11 +245,13 @@ export const CertificatePreview = forwardRef<HTMLDivElement, CertificatePreviewP
               }}
               className="flex items-center justify-center"
             >
-              <img
-                src={logoUrl}
-                alt="Logo"
-                className="max-w-full max-h-full object-contain"
-              />
+              {logoUrl && (
+                <img
+                  src={logoUrl}
+                  alt={element.placeholder === "fibqLogo" ? "FIBQ Logo" : "Logo"}
+                  className="max-w-full max-h-full object-contain"
+                />
+              )}
             </div>
           );
         }
