@@ -40,6 +40,7 @@ export default function CreateCertificatePage() {
     atcCode: "",
     dateOfIssue: new Date().toISOString().split("T")[0],
     certificateType: "trainee",
+    templateId: undefined, // Will be set when templates load
   });
 
   const handleAutoGenerate = (field: "certificateNumber" | "atcCode") => {
@@ -54,12 +55,15 @@ export default function CreateCertificatePage() {
     setIsSubmitting(true);
 
     try {
+      // Find the selected template to validate it exists in database
+      const selectedTemplate = templates.find(t => t.id === formData.templateId);
+      
       const { error } = await supabase.from("certificates").insert({
         certificate_number: formData.certificateNumber || "",
         trainee_name: formData.traineeName || "",
         training_program: formData.trainingProgramName || "",
         training_center: formData.placeOfIssue || null,
-        template_id: formData.templateId || null,
+        template_id: selectedTemplate ? selectedTemplate.id : null,
         issue_date: formData.dateOfIssue || new Date().toISOString().split("T")[0],
         status: "active",
         metadata: {
@@ -427,7 +431,7 @@ export default function CreateCertificatePage() {
                       Choose a template design for your certificate.
                     </p>
                     <TemplateSelector
-                      selectedTemplateId={formData.templateId || "classic-gold"}
+                      selectedTemplateId={formData.templateId || (templates.length > 0 ? templates[0].id : "")}
                       onSelect={(template) =>
                         setFormData((prev) => ({ ...prev, templateId: template.id }))
                       }
