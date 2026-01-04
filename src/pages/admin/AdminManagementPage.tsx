@@ -187,6 +187,10 @@ export default function AdminManagementPage() {
     
     setIsSubmitting(true);
 
+    // Store current session before creating new user
+    const { data: currentSessionData } = await supabase.auth.getSession();
+    const currentSession = currentSessionData?.session;
+
     // Create the user via Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: formData.email,
@@ -209,18 +213,29 @@ export default function AdminManagementPage() {
       return;
     }
 
+    const newUserId = authData.user.id;
+
+    // Restore the original admin session immediately
+    if (currentSession) {
+      await supabase.auth.setSession({
+        access_token: currentSession.access_token,
+        refresh_token: currentSession.refresh_token,
+      });
+    }
+
+    // Now continue with profile and role creation using the restored admin session
     // Ensure profile exists (in case trigger didn't fire)
     const { data: existingProfile } = await supabase
       .from("profiles")
       .select("id")
-      .eq("user_id", authData.user.id)
-      .single();
+      .eq("user_id", newUserId)
+      .maybeSingle();
 
     if (!existingProfile) {
       const { error: profileError } = await supabase
         .from("profiles")
         .insert({
-          user_id: authData.user.id,
+          user_id: newUserId,
           full_name: formData.fullName,
           status: "active",
         });
@@ -233,14 +248,14 @@ export default function AdminManagementPage() {
       await supabase
         .from("profiles")
         .update({ full_name: formData.fullName })
-        .eq("user_id", authData.user.id);
+        .eq("user_id", newUserId);
     }
 
     // Add admin role
     const { error: roleError } = await supabase
       .from("user_roles")
       .insert({
-        user_id: authData.user.id,
+        user_id: newUserId,
         role: "admin",
       });
 
