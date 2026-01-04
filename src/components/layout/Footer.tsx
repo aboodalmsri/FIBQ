@@ -88,14 +88,14 @@ export function Footer() {
           <p className="text-sm text-primary-foreground/60">
             © {new Date().getFullYear()} FIBQ. {t("footer.rights")}
           </p>
-          <div className="flex gap-6">
+          {/* <div className="flex gap-6">
             <Link to="#" className="text-sm text-primary-foreground/60 transition-colors hover:text-secondary">
               {t("footer.privacy")}
             </Link>
             <Link to="#" className="text-sm text-primary-foreground/60 transition-colors hover:text-secondary">
               {t("footer.terms")}
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
