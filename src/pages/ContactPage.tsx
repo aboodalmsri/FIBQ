@@ -1,34 +1,15 @@
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    title: "Email Us",
-    value: "support@certifypro.com",
-    description: "We'll respond within 24 hours",
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    value: "+1 (555) 123-4567",
-    description: "Mon-Fri, 9AM to 6PM EST",
-  },
-  {
-    icon: MapPin,
-    title: "Visit Us",
-    value: "123 Certification Ave",
-    description: "New York, NY 10001",
-  },
-];
-
 export default function ContactPage() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -38,6 +19,27 @@ export default function ContactPage() {
     message: "",
   });
 
+  const contactInfo = [
+    {
+      icon: Mail,
+      titleKey: "contact.info.email.title",
+      value: "support@fibq.org",
+      descriptionKey: "contact.info.email.description",
+    },
+    {
+      icon: Phone,
+      titleKey: "contact.info.phone.title",
+      value: "+1 (555) 123-4567",
+      descriptionKey: "contact.info.phone.description",
+    },
+    {
+      icon: MapPin,
+      titleKey: "contact.info.address.title",
+      value: "123 Certification Ave",
+      descriptionKey: "contact.info.address.description",
+    },
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -46,8 +48,8 @@ export default function ContactPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll get back to you soon.",
+      title: t("contact.form.successTitle"),
+      description: t("contact.form.successMessage"),
     });
 
     setFormData({ name: "", email: "", subject: "", message: "" });
@@ -78,10 +80,10 @@ export default function ContactPage() {
             className="mx-auto max-w-3xl text-center"
           >
             <h1 className="mb-6 font-heading text-4xl font-bold text-primary-foreground md:text-5xl">
-              Get in <span className="text-secondary">Touch</span>
+              {t("contact.hero.title")} <span className="text-secondary">{t("contact.hero.highlight")}</span>
             </h1>
             <p className="text-lg text-primary-foreground/80 md:text-xl">
-              Have questions about certificate verification? We're here to help.
+              {t("contact.hero.subtitle")}
             </p>
           </motion.div>
         </div>
@@ -99,16 +101,16 @@ export default function ContactPage() {
               className="space-y-6"
             >
               <h2 className="font-heading text-2xl font-bold text-foreground">
-                Contact Information
+                {t("contact.info.title")}
               </h2>
               <p className="text-muted-foreground">
-                Reach out through any of these channels and we'll respond promptly.
+                {t("contact.info.subtitle")}
               </p>
 
               <div className="space-y-4">
                 {contactInfo.map((item, index) => (
                   <motion.div
-                    key={item.title}
+                    key={item.titleKey}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -121,10 +123,10 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h3 className="font-heading font-semibold text-foreground">
-                            {item.title}
+                            {t(item.titleKey)}
                           </h3>
                           <p className="text-foreground">{item.value}</p>
-                          <p className="text-sm text-muted-foreground">{item.description}</p>
+                          <p className="text-sm text-muted-foreground">{t(item.descriptionKey)}</p>
                         </div>
                       </div>
                     </Card>
@@ -142,7 +144,7 @@ export default function ContactPage() {
             >
               <Card variant="elevated" className="p-6 md:p-8">
                 <CardHeader className="p-0 pb-6">
-                  <CardTitle className="text-2xl">Send us a Message</CardTitle>
+                  <CardTitle className="text-2xl">{t("contact.form.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -152,12 +154,12 @@ export default function ContactPage() {
                           htmlFor="name"
                           className="text-sm font-medium text-foreground"
                         >
-                          Full Name
+                          {t("contact.form.name")}
                         </label>
                         <Input
                           id="name"
                           name="name"
-                          placeholder="John Doe"
+                          placeholder={t("contact.form.namePlaceholder")}
                           value={formData.name}
                           onChange={handleChange}
                           required
@@ -168,13 +170,13 @@ export default function ContactPage() {
                           htmlFor="email"
                           className="text-sm font-medium text-foreground"
                         >
-                          Email Address
+                          {t("contact.form.email")}
                         </label>
                         <Input
                           id="email"
                           name="email"
                           type="email"
-                          placeholder="john@example.com"
+                          placeholder={t("contact.form.emailPlaceholder")}
                           value={formData.email}
                           onChange={handleChange}
                           required
@@ -187,12 +189,12 @@ export default function ContactPage() {
                         htmlFor="subject"
                         className="text-sm font-medium text-foreground"
                       >
-                        Subject
+                        {t("contact.form.subject")}
                       </label>
                       <Input
                         id="subject"
                         name="subject"
-                        placeholder="How can we help you?"
+                        placeholder={t("contact.form.subjectPlaceholder")}
                         value={formData.subject}
                         onChange={handleChange}
                         required
@@ -204,12 +206,12 @@ export default function ContactPage() {
                         htmlFor="message"
                         className="text-sm font-medium text-foreground"
                       >
-                        Message
+                        {t("contact.form.message")}
                       </label>
                       <Textarea
                         id="message"
                         name="message"
-                        placeholder="Tell us more about your inquiry..."
+                        placeholder={t("contact.form.messagePlaceholder")}
                         rows={5}
                         value={formData.message}
                         onChange={handleChange}
@@ -226,11 +228,11 @@ export default function ContactPage() {
                       className="w-full md:w-auto"
                     >
                       {isSubmitting ? (
-                        "Sending..."
+                        t("contact.form.sending")
                       ) : (
                         <>
                           <Send className="mr-2 h-4 w-4" />
-                          Send Message
+                          {t("contact.form.send")}
                         </>
                       )}
                     </Button>

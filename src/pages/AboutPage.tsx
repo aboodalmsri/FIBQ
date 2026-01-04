@@ -1,54 +1,57 @@
 import { motion } from "framer-motion";
 import { Award, CheckCircle, Eye, Shield, Target, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 
-const values = [
-  {
-    icon: Shield,
-    title: "Integrity",
-    description: "We maintain the highest standards of data security and certificate authenticity.",
-  },
-  {
-    icon: Eye,
-    title: "Transparency",
-    description: "Every verification is traceable and our processes are fully transparent.",
-  },
-  {
-    icon: Users,
-    title: "Accessibility",
-    description: "Free public access to certificate verification for everyone, anywhere.",
-  },
-  {
-    icon: Target,
-    title: "Accuracy",
-    description: "99.9% verification accuracy backed by advanced validation systems.",
-  },
-];
-
-const timeline = [
-  {
-    year: "2018",
-    title: "Platform Launch",
-    description: "Started as a small project to digitize academic certificates.",
-  },
-  {
-    year: "2020",
-    title: "QR Integration",
-    description: "Introduced QR code scanning for instant mobile verification.",
-  },
-  {
-    year: "2022",
-    title: "100+ Partners",
-    description: "Reached milestone of 100 institutional partnerships.",
-  },
-  {
-    year: "2024",
-    title: "Global Expansion",
-    description: "Now serving institutions and individuals worldwide.",
-  },
-];
-
 export default function AboutPage() {
+  const { t } = useTranslation();
+
+  const values = [
+    {
+      icon: Shield,
+      titleKey: "about.values.integrity.title",
+      descriptionKey: "about.values.integrity.description",
+    },
+    {
+      icon: Eye,
+      titleKey: "about.values.transparency.title",
+      descriptionKey: "about.values.transparency.description",
+    },
+    {
+      icon: Users,
+      titleKey: "about.values.accessibility.title",
+      descriptionKey: "about.values.accessibility.description",
+    },
+    {
+      icon: Target,
+      titleKey: "about.values.accuracy.title",
+      descriptionKey: "about.values.accuracy.description",
+    },
+  ];
+
+  const timeline = [
+    {
+      year: "2018",
+      titleKey: "about.timeline.2018.title",
+      descriptionKey: "about.timeline.2018.description",
+    },
+    {
+      year: "2020",
+      titleKey: "about.timeline.2020.title",
+      descriptionKey: "about.timeline.2020.description",
+    },
+    {
+      year: "2022",
+      titleKey: "about.timeline.2022.title",
+      descriptionKey: "about.timeline.2022.description",
+    },
+    {
+      year: "2024",
+      titleKey: "about.timeline.2024.title",
+      descriptionKey: "about.timeline.2024.description",
+    },
+  ];
+
   return (
     <>
       {/* Hero Section */}
@@ -64,11 +67,10 @@ export default function AboutPage() {
             className="mx-auto max-w-3xl text-center"
           >
             <h1 className="mb-6 font-heading text-4xl font-bold text-primary-foreground md:text-5xl">
-              About <span className="text-secondary">CertifyPro</span>
+              {t("about.hero.title")} <span className="text-secondary">FIBQ</span>
             </h1>
             <p className="text-lg text-primary-foreground/80 md:text-xl">
-              We are dedicated to building trust through secure, transparent, and 
-              accessible digital certificate verification.
+              {t("about.hero.subtitle")}
             </p>
           </motion.div>
         </div>
@@ -86,28 +88,26 @@ export default function AboutPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
                 <Award className="h-4 w-4" />
-                Our Mission
+                {t("about.mission.label")}
               </div>
               <h2 className="font-heading text-3xl font-bold text-foreground md:text-4xl">
-                Eliminating Certificate Fraud Worldwide
+                {t("about.mission.title")}
               </h2>
               <p className="text-lg leading-relaxed text-muted-foreground">
-                Our mission is to create a world where every certificate can be instantly verified, 
-                eliminating fraud and building trust between institutions and individuals. We believe 
-                that authentic credentials should be easily verifiable by anyone, anywhere.
+                {t("about.mission.description")}
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="h-5 w-5 text-secondary" />
-                  <span className="text-foreground">Secure Verification</span>
+                  <span className="text-foreground">{t("about.mission.point1")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="h-5 w-5 text-secondary" />
-                  <span className="text-foreground">Instant Results</span>
+                  <span className="text-foreground">{t("about.mission.point2")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="h-5 w-5 text-secondary" />
-                  <span className="text-foreground">Free Access</span>
+                  <span className="text-foreground">{t("about.mission.point3")}</span>
                 </div>
               </div>
             </motion.div>
@@ -125,11 +125,10 @@ export default function AboutPage() {
                     <Shield className="h-12 w-12 text-secondary" />
                   </div>
                   <h3 className="mb-2 font-heading text-2xl font-bold text-foreground">
-                    Our Vision
+                    {t("about.vision.title")}
                   </h3>
                   <p className="text-muted-foreground">
-                    To become the global standard for digital certificate verification, 
-                    trusted by institutions, employers, and individuals worldwide.
+                    {t("about.vision.description")}
                   </p>
                 </CardContent>
               </Card>
@@ -148,17 +147,17 @@ export default function AboutPage() {
             className="mx-auto mb-12 max-w-2xl text-center"
           >
             <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
-              Our Core Values
+              {t("about.values.title")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              These principles guide everything we do at CertifyPro.
+              {t("about.values.subtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
               <motion.div
-                key={value.title}
+                key={value.titleKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -170,10 +169,10 @@ export default function AboutPage() {
                       <value.icon className="h-7 w-7 text-primary-foreground" />
                     </div>
                     <h3 className="mb-2 font-heading text-xl font-semibold text-foreground">
-                      {value.title}
+                      {t(value.titleKey)}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      {value.description}
+                      {t(value.descriptionKey)}
                     </p>
                   </CardContent>
                 </Card>
@@ -193,10 +192,10 @@ export default function AboutPage() {
             className="mx-auto mb-12 max-w-2xl text-center"
           >
             <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
-              Our Journey
+              {t("about.journey.title")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              From a small project to a global verification platform.
+              {t("about.journey.subtitle")}
             </p>
           </motion.div>
 
@@ -223,9 +222,9 @@ export default function AboutPage() {
                   <Card variant="default" className="ml-12 flex-1 p-6 md:ml-0">
                     <p className="text-sm font-medium text-secondary">{item.year}</p>
                     <h3 className="mb-1 font-heading text-lg font-semibold text-foreground">
-                      {item.title}
+                      {t(item.titleKey)}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                    <p className="text-sm text-muted-foreground">{t(item.descriptionKey)}</p>
                   </Card>
                 </motion.div>
               ))}

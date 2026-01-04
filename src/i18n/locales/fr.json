@@ -1,228 +1,36 @@
 {
-  "common": {
-    "loading": "Chargement...",
-    "save": "Enregistrer",
-    "cancel": "Annuler",
-    "delete": "Supprimer",
-    "edit": "Modifier",
-    "view": "Voir",
-    "create": "Créer",
-    "search": "Rechercher",
-    "actions": "Actions",
-    "status": "Statut",
-    "active": "Actif",
-    "suspended": "Suspendu",
-    "expired": "Expiré",
-    "revoked": "Révoqué",
-    "name": "Nom",
-    "email": "E-mail",
-    "password": "Mot de passe",
-    "submit": "Soumettre",
-    "back": "Retour",
-    "next": "Suivant",
-    "previous": "Précédent",
-    "yes": "Oui",
-    "no": "Non",
-    "confirm": "Confirmer",
-    "close": "Fermer",
-    "language": "Langue"
-  },
-  "nav": {
-    "home": "Accueil",
-    "about": "À propos",
-    "contact": "Contact",
-    "verify": "Vérifier le certificat",
-    "admin": "Admin",
-    "dashboard": "Tableau de bord",
-    "certificates": "Certificats",
-    "templates": "Modèles",
-    "admins": "Administrateurs",
-    "logout": "Déconnexion"
-  },
+  "common": { "loading": "Chargement...", "save": "Enregistrer", "cancel": "Annuler", "delete": "Supprimer", "edit": "Modifier", "view": "Voir", "create": "Créer", "search": "Rechercher", "actions": "Actions", "status": "Statut", "active": "Actif", "suspended": "Suspendu", "expired": "Expiré", "revoked": "Révoqué", "valid": "Valide", "name": "Nom", "email": "Email", "password": "Mot de passe", "submit": "Soumettre", "back": "Retour", "next": "Suivant", "previous": "Précédent", "yes": "Oui", "no": "Non", "confirm": "Confirmer", "close": "Fermer", "language": "Langue" },
+  "nav": { "home": "Accueil", "about": "À propos", "contact": "Contact", "verify": "Vérifier", "admin": "Admin", "dashboard": "Tableau de bord", "certificates": "Certificats", "templates": "Modèles", "admins": "Administrateurs", "logout": "Déconnexion" },
   "home": {
-    "hero": {
-      "title": "Vérification Professionnelle des Certificats",
-      "subtitle": "Vérification sécurisée et instantanée des certificats de formation",
-      "cta": "Vérifier le Certificat"
-    },
-    "features": {
-      "title": "Pourquoi Choisir FIBQ",
-      "secure": {
-        "title": "Sécurisé et Vérifié",
-        "description": "Tous les certificats sont cryptographiquement sécurisés et vérifiables instantanément"
-      },
-      "instant": {
-        "title": "Vérification Instantanée",
-        "description": "Vérifiez n'importe quel certificat en quelques secondes grâce à notre système de code QR"
-      },
-      "trusted": {
-        "title": "Reconnu Mondialement",
-        "description": "Reconnu par les organisations et institutions du monde entier"
-      }
-    }
+    "hero": { "title": "Certificat numérique", "subtitle": "Plateforme de vérification", "description": "Vérifiez instantanément l'authenticité des certificats.", "placeholder": "Entrez le numéro...", "verifyNow": "Vérifier", "qrHint": "Ou scannez le code QR" },
+    "stats": { "certificatesIssued": "Certificats émis", "verificationAccuracy": "Précision", "availableAnytime": "Disponible 24h/24", "partnerInstitutions": "Partenaires" },
+    "features": { "title": "Pourquoi nous choisir ?", "description": "Sécurité et confiance.", "secure": { "title": "Sécurité", "description": "Chiffrement avancé." }, "instant": { "title": "Instantané", "description": "Vérification en secondes." }, "qrCode": { "title": "Code QR", "description": "Code QR unique." }, "official": { "title": "Officiel", "description": "Signés numériquement." } },
+    "cta": { "title": "Prêt à vérifier ?", "description": "Entrez votre numéro ci-dessus.", "verifyButton": "Page de vérification", "learnMore": "En savoir plus" }
   },
   "verify": {
-    "title": "Vérifier le Certificat",
-    "subtitle": "Entrez le numéro du certificat pour vérifier son authenticité",
-    "placeholder": "Entrez le numéro du certificat (ex: FIBQ-XXXX-XXXX)",
-    "button": "Vérifier",
-    "scanning": "Recherche...",
-    "notFound": {
-      "title": "Certificat Non Trouvé",
-      "description": "Nous n'avons pas pu trouver de certificat avec le numéro fourni.",
-      "tips": {
-        "title": "Conseils:",
-        "format": "Les numéros de certificat suivent le format: FIBQ-XXXX-XXXX",
-        "check": "Vérifiez que vous avez entré le numéro de certificat correctement",
-        "qr": "Essayez de scanner le code QR sur le certificat physique",
-        "support": "Contactez le support si vous pensez qu'il y a une erreur"
-      }
-    },
-    "verified": {
-      "title": "Certificat Vérifié",
-      "authentic": "Ce certificat est authentique et valide",
-      "holder": "Titulaire du Certificat",
-      "program": "Programme de Formation",
-      "center": "Centre de Formation",
-      "issueDate": "Date d'Émission",
-      "expiryDate": "Date d'Expiration",
-      "certificateNumber": "Numéro du Certificat",
-      "status": "Statut"
-    }
+    "hero": { "title": "Vérifier le", "highlight": "Certificat", "subtitle": "Entrez le numéro ci-dessous." },
+    "placeholder": "Numéro (ex: FIBQ-A1B2-C3D4)", "button": "Vérifier", "scanning": "Recherche...", "searching": "Recherche...", "qrHint": "Ou scannez le code QR", "downloadPNG": "PNG", "downloadPDF": "PDF",
+    "verified": { "title": "Certificat vérifié", "subtitle": "Authentique et officiel." },
+    "notFound": { "title": "Non trouvé", "description": "Certificat introuvable.", "tips": { "title": "Conseils :", "format": "Format: FIBQ-XXXX-XXXX", "check": "Vérifiez le numéro", "qr": "Scannez le QR", "support": "Contactez le support" } },
+    "howTo": { "title": "Comment vérifier", "description": "Entrez le numéro ou scannez.", "formatTitle": "Format :", "formatHint": "Entrez exactement." }
   },
   "about": {
-    "title": "À Propos de FIBQ",
-    "subtitle": "Leader en certification et accréditation professionnelle",
-    "mission": {
-      "title": "Notre Mission",
-      "description": "Fournir des services de certification et d'accréditation de classe mondiale qui permettent aux professionnels et aux organisations d'atteindre l'excellence."
-    },
-    "vision": {
-      "title": "Notre Vision",
-      "description": "Être la norme mondiale pour la certification professionnelle, reconnu pour l'intégrité, l'innovation et l'impact."
-    }
+    "hero": { "title": "À propos de", "subtitle": "Vérification sécurisée et accessible." },
+    "mission": { "label": "Mission", "title": "Éliminer la fraude", "description": "Vérification instantanée mondiale.", "point1": "Sécurisé", "point2": "Instantané", "point3": "Gratuit" },
+    "vision": { "title": "Vision", "description": "Norme mondiale de vérification." },
+    "values": { "title": "Nos valeurs", "subtitle": "Nos principes.", "integrity": { "title": "Intégrité", "description": "Standards élevés." }, "transparency": { "title": "Transparence", "description": "Processus clairs." }, "accessibility": { "title": "Accessibilité", "description": "Accès gratuit." }, "accuracy": { "title": "Précision", "description": "99,9% de précision." } },
+    "journey": { "title": "Notre parcours", "subtitle": "Du projet à la plateforme mondiale." },
+    "timeline": { "2018": { "title": "Lancement", "description": "Début du projet." }, "2020": { "title": "QR", "description": "Scan QR mobile." }, "2022": { "title": "100+ partenaires", "description": "100 partenariats." }, "2024": { "title": "Mondial", "description": "Expansion mondiale." } }
   },
   "contact": {
-    "title": "Contactez-nous",
-    "subtitle": "Prenez contact avec notre équipe",
-    "form": {
-      "name": "Votre Nom",
-      "email": "Adresse E-mail",
-      "subject": "Sujet",
-      "message": "Message",
-      "send": "Envoyer le Message"
-    },
-    "info": {
-      "title": "Coordonnées",
-      "address": "Adresse",
-      "phone": "Téléphone",
-      "emailLabel": "E-mail"
-    }
+    "hero": { "title": "Entrez en", "highlight": "Contact", "subtitle": "Nous sommes là pour vous." },
+    "info": { "title": "Coordonnées", "subtitle": "Contactez-nous.", "email": { "title": "Email", "description": "Réponse sous 24h" }, "phone": { "title": "Téléphone", "description": "Lun-Ven" }, "address": { "title": "Adresse", "description": "New York" } },
+    "form": { "title": "Message", "name": "Nom", "namePlaceholder": "Jean Dupont", "email": "Email", "emailPlaceholder": "jean@exemple.com", "subject": "Sujet", "subjectPlaceholder": "Comment aider ?", "message": "Message", "messagePlaceholder": "Votre demande...", "send": "Envoyer", "sending": "Envoi...", "successTitle": "Envoyé !", "successMessage": "Nous répondrons bientôt." }
   },
   "admin": {
-    "dashboard": {
-      "title": "Tableau de Bord",
-      "welcome": "Bon retour",
-      "stats": {
-        "totalCertificates": "Total des Certificats",
-        "thisMonth": "Ce Mois",
-        "activeTemplates": "Modèles Actifs"
-      }
-    },
-    "certificates": {
-      "title": "Tous les Certificats",
-      "subtitle": "Gérer et voir tous les certificats émis",
-      "create": "Créer un Certificat",
-      "edit": "Modifier le Certificat",
-      "holder": "Titulaire",
-      "program": "Programme",
-      "center": "Centre",
-      "date": "Date",
-      "noCertificates": "Aucun certificat pour l'instant. Créez votre premier certificat!",
-      "noResults": "Aucun certificat trouvé correspondant à votre recherche.",
-      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce certificat?"
-    },
-    "createCertificate": {
-      "title": "Créer un Certificat",
-      "editTitle": "Modifier le Certificat",
-      "subtitle": "Concevez et générez un nouveau certificat avec tous les champs requis",
-      "editSubtitle": "Mettre à jour les détails du certificat",
-      "tabs": {
-        "details": "Détails",
-        "issuer": "Info Émetteur",
-        "template": "Modèle"
-      },
-      "fields": {
-        "certificateType": "Type de Certificat",
-        "certificateNumber": "Numéro du Certificat",
-        "traineeName": "Nom Complet du Stagiaire",
-        "traineePhoto": "Photo du Stagiaire (Optionnel)",
-        "trainingProgram": "Nom du Programme de Formation",
-        "certificateTitle": "Titre / Description du Certificat",
-        "atcCode": "Code ATC (Centre de Formation Accrédité)",
-        "dateOfIssue": "Date d'Émission",
-        "placeOfIssue": "Lieu d'Émission",
-        "chairpersonName": "Nom du Président / Signataire",
-        "chairpersonTitle": "Titre du Président",
-        "legalDisclaimer": "Avertissement Légal",
-        "showSeal": "Afficher le Sceau Officiel",
-        "showQRCode": "Inclure le Code QR"
-      },
-      "generate": "Générer",
-      "saveCertificate": "Enregistrer le Certificat",
-      "updateCertificate": "Mettre à Jour le Certificat",
-      "creating": "Création...",
-      "updating": "Mise à jour...",
-      "preview": {
-        "title": "Aperçu en Direct",
-        "subtitle": "Le certificat se met à jour en temps réel",
-        "exportNote": "Exportez en pleine résolution pour l'impression. Aperçu affiché à 60%."
-      }
-    },
-    "templates": {
-      "title": "Modèles de Certificats",
-      "subtitle": "Gérer et personnaliser les designs de certificats",
-      "create": "Créer un Modèle"
-    },
-    "admins": {
-      "title": "Gestion des Administrateurs",
-      "subtitle": "Gérer les comptes administrateurs et les permissions",
-      "addAdmin": "Ajouter un Admin",
-      "totalAdmins": "Total Admins",
-      "activeAdmins": "Actif",
-      "suspendedAdmins": "Suspendu",
-      "role": "Rôle",
-      "added": "Ajouté",
-      "superAdmin": "Super Admin",
-      "createDialog": {
-        "title": "Créer un Nouvel Admin",
-        "subtitle": "Ajouter un nouvel administrateur au système"
-      },
-      "editDialog": {
-        "title": "Modifier l'Admin",
-        "subtitle": "Mettre à jour les détails de l'administrateur"
-      },
-      "deleteDialog": {
-        "title": "Supprimer l'Administrateur?",
-        "description": "Cela supprimera les privilèges d'admin. Il ne pourra plus accéder au tableau de bord admin."
-      },
-      "suspend": "Suspendre",
-      "activate": "Activer",
-      "remove": "Supprimer",
-      "fullName": "Nom Complet"
-    },
-    "login": {
-      "title": "Connexion Admin",
-      "subtitle": "Connectez-vous pour accéder au tableau de bord admin",
-      "email": "E-mail",
-      "password": "Mot de passe",
-      "signIn": "Se Connecter",
-      "signingIn": "Connexion en cours..."
-    }
+    "dashboard": { "title": "Tableau de bord", "welcome": "Bon retour !", "recentCertificates": "Récents", "viewAll": "Voir tout", "stats": { "totalCertificates": "Total", "thisMonth": "Ce mois", "verificationsToday": "Aujourd'hui", "activeTemplates": "Modèles actifs" }, "quickActions": { "newCertificate": "Nouveau", "createAndIssue": "Créer", "viewAll": "Voir tout", "manageCertificates": "Gérer", "templates": "Modèles", "manageDesigns": "Designs" } },
+    "certificates": { "title": "Certificats", "subtitle": "Gérer les certificats", "create": "Créer", "edit": "Modifier", "holder": "Titulaire", "program": "Programme", "center": "Centre", "date": "Date", "certificateNumber": "N°", "noCertificates": "Aucun certificat.", "noResults": "Aucun résultat.", "deleteConfirm": "Supprimer ?" },
+    "login": { "title": "Connexion", "subtitle": "Accédez au tableau de bord", "email": "Email", "emailPlaceholder": "Votre email", "password": "Mot de passe", "passwordPlaceholder": "Votre mot de passe", "signIn": "Connexion", "signingIn": "Connexion...", "accessDenied": "Accès refusé", "noPrivileges": "Pas de privilèges.", "failed": "Échec", "invalidCredentials": "Identifiants invalides.", "success": "Succès", "welcomeBack": "Bienvenue.", "contactAdmin": "Contactez l'admin.", "protectedArea": "Zone protégée." }
   },
-  "footer": {
-    "rights": "Tous droits réservés",
-    "privacy": "Politique de Confidentialité",
-    "terms": "Conditions d'Utilisation"
-  }
+  "footer": { "brandSubtitle": "Conseil International Français pour la Qualité", "description": "Vérification sécurisée et fiable.", "quickLinks": "Liens", "contactUs": "Contact", "trustedPlatform": "Confiance", "secure": "100% Sécurisé", "verified": "Vérifié", "rights": "Tous droits réservés.", "privacy": "Confidentialité", "terms": "Conditions" }
 }

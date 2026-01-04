@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { Award, Calendar, FileText, Plus, TrendingUp, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCertificates } from "@/hooks/useCertificates";
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { certificates, isLoading, stats } = useCertificates();
 
@@ -13,30 +15,26 @@ export default function AdminDashboard() {
 
   const statsData = [
     {
-      title: "Total Certificates",
+      titleKey: "admin.dashboard.stats.totalCertificates",
       value: stats.total.toString(),
-      change: "",
       icon: FileText,
       color: "bg-primary",
     },
     {
-      title: "This Month",
+      titleKey: "admin.dashboard.stats.thisMonth",
       value: stats.thisMonth.toString(),
-      change: "",
       icon: Calendar,
       color: "bg-secondary",
     },
     {
-      title: "Verifications Today",
+      titleKey: "admin.dashboard.stats.verificationsToday",
       value: "—",
-      change: "",
       icon: TrendingUp,
       color: "bg-green-600",
     },
     {
-      title: "Active Templates",
+      titleKey: "admin.dashboard.stats.activeTemplates",
       value: stats.activeTemplates.toString(),
-      change: "",
       icon: Award,
       color: "bg-purple-600",
     },
@@ -55,15 +53,15 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-foreground">Dashboard</h1>
+          <h1 className="font-heading text-3xl font-bold text-foreground">{t("admin.dashboard.title")}</h1>
           <p className="mt-1 text-muted-foreground">
-            Welcome back! Here's an overview of your certificates.
+            {t("admin.dashboard.welcome")}
           </p>
         </div>
         <Button asChild variant="gold" size="lg">
           <Link to="/admin/certificates/new">
             <Plus className="mr-2 h-4 w-4" />
-            Create Certificate
+            {t("admin.certificates.create")}
           </Link>
         </Button>
       </div>
@@ -72,7 +70,7 @@ export default function AdminDashboard() {
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {statsData.map((stat, index) => (
           <motion.div
-            key={stat.title}
+            key={stat.titleKey}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -81,7 +79,7 @@ export default function AdminDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t(stat.titleKey)}</p>
                     <p className="mt-2 font-heading text-3xl font-bold text-foreground">
                       {stat.value}
                     </p>
@@ -104,9 +102,9 @@ export default function AdminDashboard() {
       >
         <Card variant="default">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Recent Certificates</CardTitle>
+            <CardTitle>{t("admin.dashboard.recentCertificates")}</CardTitle>
             <Button asChild variant="ghost" size="sm">
-              <Link to="/admin/certificates">View All</Link>
+              <Link to="/admin/certificates">{t("admin.dashboard.viewAll")}</Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -115,23 +113,23 @@ export default function AdminDashboard() {
                 <thead>
                   <tr className="border-b border-border text-left">
                     <th className="pb-3 text-sm font-medium text-muted-foreground">
-                      Certificate #
+                      {t("admin.certificates.certificateNumber")}
                     </th>
-                    <th className="pb-3 text-sm font-medium text-muted-foreground">Holder</th>
+                    <th className="pb-3 text-sm font-medium text-muted-foreground">{t("admin.certificates.holder")}</th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground md:table-cell">
-                      Program
+                      {t("admin.certificates.program")}
                     </th>
                     <th className="hidden pb-3 text-sm font-medium text-muted-foreground sm:table-cell">
-                      Date
+                      {t("admin.certificates.date")}
                     </th>
-                    <th className="pb-3 text-sm font-medium text-muted-foreground">Status</th>
+                    <th className="pb-3 text-sm font-medium text-muted-foreground">{t("common.status")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {recentCertificates.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="py-8 text-center text-muted-foreground">
-                        No certificates yet. Create your first certificate!
+                        {t("admin.certificates.noCertificates")}
                       </td>
                     </tr>
                   ) : (
@@ -161,7 +159,7 @@ export default function AdminDashboard() {
                               ? "bg-amber-100 text-amber-800"
                               : "bg-red-100 text-red-800"
                           }`}>
-                            {cert.status}
+                            {t(`common.${cert.status}`)}
                           </span>
                         </td>
                       </tr>
@@ -191,8 +189,8 @@ export default function AdminDashboard() {
               <Plus className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
-              <h3 className="font-heading font-semibold text-foreground">New Certificate</h3>
-              <p className="text-sm text-muted-foreground">Create and issue</p>
+              <h3 className="font-heading font-semibold text-foreground">{t("admin.dashboard.quickActions.newCertificate")}</h3>
+              <p className="text-sm text-muted-foreground">{t("admin.dashboard.quickActions.createAndIssue")}</p>
             </div>
           </div>
         </Card>
@@ -207,8 +205,8 @@ export default function AdminDashboard() {
               <FileText className="h-6 w-6 text-secondary-foreground" />
             </div>
             <div>
-              <h3 className="font-heading font-semibold text-foreground">View All</h3>
-              <p className="text-sm text-muted-foreground">Manage certificates</p>
+              <h3 className="font-heading font-semibold text-foreground">{t("admin.dashboard.quickActions.viewAll")}</h3>
+              <p className="text-sm text-muted-foreground">{t("admin.dashboard.quickActions.manageCertificates")}</p>
             </div>
           </div>
         </Card>
@@ -223,8 +221,8 @@ export default function AdminDashboard() {
               <Award className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h3 className="font-heading font-semibold text-foreground">Templates</h3>
-              <p className="text-sm text-muted-foreground">Manage designs</p>
+              <h3 className="font-heading font-semibold text-foreground">{t("admin.dashboard.quickActions.templates")}</h3>
+              <p className="text-sm text-muted-foreground">{t("admin.dashboard.quickActions.manageDesigns")}</p>
             </div>
           </div>
         </Card>
