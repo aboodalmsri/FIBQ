@@ -1,0 +1,228 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "create": "Create",
+    "search": "Search",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "suspended": "Suspended",
+    "expired": "Expired",
+    "revoked": "Revoked",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "close": "Close",
+    "language": "Language"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "verify": "Verify Certificate",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "certificates": "Certificates",
+    "templates": "Templates",
+    "admins": "Admins",
+    "logout": "Logout"
+  },
+  "home": {
+    "hero": {
+      "title": "Professional Certificate Verification",
+      "subtitle": "Secure, instant verification for training certificates",
+      "cta": "Verify Certificate"
+    },
+    "features": {
+      "title": "Why Choose FIBQ",
+      "secure": {
+        "title": "Secure & Verified",
+        "description": "All certificates are cryptographically secured and instantly verifiable"
+      },
+      "instant": {
+        "title": "Instant Verification",
+        "description": "Verify any certificate in seconds using our QR code system"
+      },
+      "trusted": {
+        "title": "Trusted Worldwide",
+        "description": "Recognized by organizations and institutions globally"
+      }
+    }
+  },
+  "verify": {
+    "title": "Verify Certificate",
+    "subtitle": "Enter the certificate number to verify its authenticity",
+    "placeholder": "Enter certificate number (e.g., FIBQ-XXXX-XXXX)",
+    "button": "Verify",
+    "scanning": "Searching...",
+    "notFound": {
+      "title": "Certificate Not Found",
+      "description": "We couldn't find a certificate with the number you provided.",
+      "tips": {
+        "title": "Tips:",
+        "format": "Certificate numbers follow the format: FIBQ-XXXX-XXXX",
+        "check": "Check that you've entered the certificate number correctly",
+        "qr": "Try scanning the QR code on the physical certificate",
+        "support": "Contact support if you believe this is an error"
+      }
+    },
+    "verified": {
+      "title": "Certificate Verified",
+      "authentic": "This certificate is authentic and valid",
+      "holder": "Certificate Holder",
+      "program": "Training Program",
+      "center": "Training Center",
+      "issueDate": "Issue Date",
+      "expiryDate": "Expiry Date",
+      "certificateNumber": "Certificate Number",
+      "status": "Status"
+    }
+  },
+  "about": {
+    "title": "About FIBQ",
+    "subtitle": "Leading the way in professional certification and accreditation",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To provide world-class certification and accreditation services that empower professionals and organizations to achieve excellence."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To be the global standard for professional certification, recognized for integrity, innovation, and impact."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "form": {
+      "name": "Your Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message"
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "emailLabel": "Email"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome back",
+      "stats": {
+        "totalCertificates": "Total Certificates",
+        "thisMonth": "This Month",
+        "activeTemplates": "Active Templates"
+      }
+    },
+    "certificates": {
+      "title": "All Certificates",
+      "subtitle": "Manage and view all issued certificates",
+      "create": "Create Certificate",
+      "edit": "Edit Certificate",
+      "holder": "Holder",
+      "program": "Program",
+      "center": "Center",
+      "date": "Date",
+      "noCertificates": "No certificates yet. Create your first certificate!",
+      "noResults": "No certificates found matching your search.",
+      "deleteConfirm": "Are you sure you want to delete this certificate?"
+    },
+    "createCertificate": {
+      "title": "Create Certificate",
+      "editTitle": "Edit Certificate",
+      "subtitle": "Design and generate a new certificate with all required fields",
+      "editSubtitle": "Update certificate details",
+      "tabs": {
+        "details": "Details",
+        "issuer": "Issuer Info",
+        "template": "Template"
+      },
+      "fields": {
+        "certificateType": "Certificate Type",
+        "certificateNumber": "Certificate Number",
+        "traineeName": "Trainee Full Name",
+        "traineePhoto": "Trainee Photo (Optional)",
+        "trainingProgram": "Training Program Name",
+        "certificateTitle": "Certificate Title / Description",
+        "atcCode": "ATC Code (Accredited Training Center)",
+        "dateOfIssue": "Date of Issue",
+        "placeOfIssue": "Place of Issue",
+        "chairpersonName": "Chairperson / Signatory Name",
+        "chairpersonTitle": "Chairperson Title",
+        "legalDisclaimer": "Legal Disclaimer",
+        "showSeal": "Show Official Seal",
+        "showQRCode": "Include QR Code"
+      },
+      "generate": "Generate",
+      "saveCertificate": "Save Certificate",
+      "updateCertificate": "Update Certificate",
+      "creating": "Creating...",
+      "updating": "Updating...",
+      "preview": {
+        "title": "Live Preview",
+        "subtitle": "Certificate updates as you type",
+        "exportNote": "Export at full resolution for printing. Preview shown at 60% scale."
+      }
+    },
+    "templates": {
+      "title": "Certificate Templates",
+      "subtitle": "Manage and customize certificate designs",
+      "create": "Create Template"
+    },
+    "admins": {
+      "title": "Admin Management",
+      "subtitle": "Manage administrator accounts and permissions",
+      "addAdmin": "Add Admin",
+      "totalAdmins": "Total Admins",
+      "activeAdmins": "Active",
+      "suspendedAdmins": "Suspended",
+      "role": "Role",
+      "added": "Added",
+      "superAdmin": "Super Admin",
+      "createDialog": {
+        "title": "Create New Admin",
+        "subtitle": "Add a new administrator to the system"
+      },
+      "editDialog": {
+        "title": "Edit Admin",
+        "subtitle": "Update administrator details"
+      },
+      "deleteDialog": {
+        "title": "Remove Administrator?",
+        "description": "This will remove admin privileges. They will no longer be able to access the admin dashboard."
+      },
+      "suspend": "Suspend",
+      "activate": "Activate",
+      "remove": "Remove",
+      "fullName": "Full Name"
+    },
+    "login": {
+      "title": "Admin Login",
+      "subtitle": "Sign in to access the admin dashboard",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign In",
+      "signingIn": "Signing in..."
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

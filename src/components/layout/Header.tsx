@@ -2,20 +2,23 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import fibqLogo from "@/assets/fibq-logo.png";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/verify", label: "Verify Certificate" },
-  { href: "/contact", label: "Contact" },
-];
 
 export function Header() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const navLinks = [
+    { href: "/", label: t("nav.home") },
+    { href: "/about", label: t("nav.about") },
+    { href: "/verify", label: t("nav.verify") },
+    { href: "/contact", label: t("nav.contact") },
+  ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-card/95 backdrop-blur-md">
@@ -58,22 +61,25 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Admin Login Button */}
-        <div className="hidden md:block">
+        {/* Right side: Language Switcher + Admin Login */}
+        <div className="hidden items-center gap-2 md:flex">
+          <LanguageSwitcher />
           <Button asChild variant="outline" size="sm">
-            <Link to="/admin/login">Admin Login</Link>
+            <Link to="/admin/login">{t("nav.admin")}</Link>
           </Button>
         </div>
 
         {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -103,7 +109,7 @@ export function Header() {
             <div className="mt-2 border-t border-border pt-4">
               <Button asChild variant="outline" className="w-full">
                 <Link to="/admin/login" onClick={() => setIsMobileMenuOpen(false)}>
-                  Admin Login
+                  {t("nav.admin")}
                 </Link>
               </Button>
             </div>

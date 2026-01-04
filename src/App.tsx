@@ -15,6 +15,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CertificatesListPage from "./pages/admin/CertificatesListPage";
 import CreateCertificatePage from "./pages/admin/CreateCertificatePage";
+import EditCertificatePage from "./pages/admin/EditCertificatePage";
 import TemplatesPage from "./pages/admin/TemplatesPage";
 import AdminManagementPage from "./pages/admin/AdminManagementPage";
 import NotFound from "./pages/NotFound";
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="certificates" element={<CertificatesListPage />} />
               <Route path="certificates/new" element={<CreateCertificatePage />} />
+              <Route path="certificates/:id/edit" element={<EditCertificatePage />} />
               <Route path="templates" element={<TemplatesPage />} />
               <Route path="admins" element={<AdminManagementPage />} />
             </Route>
