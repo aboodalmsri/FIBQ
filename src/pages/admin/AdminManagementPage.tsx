@@ -209,6 +209,33 @@ export default function AdminManagementPage() {
       return;
     }
 
+    // Ensure profile exists (in case trigger didn't fire)
+    const { data: existingProfile } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("user_id", authData.user.id)
+      .single();
+
+    if (!existingProfile) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({
+          user_id: authData.user.id,
+          full_name: formData.fullName,
+          status: "active",
+        });
+
+      if (profileError) {
+        console.error("Error creating profile:", profileError);
+      }
+    } else {
+      // Update existing profile with full name
+      await supabase
+        .from("profiles")
+        .update({ full_name: formData.fullName })
+        .eq("user_id", authData.user.id);
+    }
+
     // Add admin role
     const { error: roleError } = await supabase
       .from("user_roles")
@@ -243,12 +270,35 @@ export default function AdminManagementPage() {
     
     setIsSubmitting(true);
 
-    const { error } = await supabase
+    // First check if profile exists
+    const { data: existingProfile } = await supabase
       .from("profiles")
-      .update({ full_name: formData.fullName })
-      .eq("user_id", editingAdmin.user_id);
+      .select("id")
+      .eq("user_id", editingAdmin.user_id)
+      .single();
+
+    let error;
+    if (!existingProfile) {
+      // Create profile if it doesn't exist
+      const result = await supabase
+        .from("profiles")
+        .insert({
+          user_id: editingAdmin.user_id,
+          full_name: formData.fullName,
+          status: "active",
+        });
+      error = result.error;
+    } else {
+      // Update existing profile
+      const result = await supabase
+        .from("profiles")
+        .update({ full_name: formData.fullName })
+        .eq("user_id", editingAdmin.user_id);
+      error = result.error;
+    }
 
     if (error) {
+      console.error("Error updating admin:", error);
       toast({
         title: "Error",
         description: "Failed to update admin.",
@@ -272,12 +322,35 @@ export default function AdminManagementPage() {
   const handleToggleStatus = async (admin: AdminUser) => {
     const newStatus = admin.status === "active" ? "suspended" : "active";
     
-    const { error } = await supabase
+    // First check if profile exists
+    const { data: existingProfile } = await supabase
       .from("profiles")
-      .update({ status: newStatus })
-      .eq("user_id", admin.user_id);
+      .select("id")
+      .eq("user_id", admin.user_id)
+      .single();
+
+    let error;
+    if (!existingProfile) {
+      // Create profile if it doesn't exist
+      const result = await supabase
+        .from("profiles")
+        .insert({
+          user_id: admin.user_id,
+          full_name: admin.full_name || "Admin",
+          status: newStatus,
+        });
+      error = result.error;
+    } else {
+      // Update existing profile
+      const result = await supabase
+        .from("profiles")
+        .update({ status: newStatus })
+        .eq("user_id", admin.user_id);
+      error = result.error;
+    }
 
     if (error) {
+      console.error("Error updating status:", error);
       toast({
         title: "Error",
         description: "Failed to update admin status.",

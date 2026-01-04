@@ -171,9 +171,11 @@ export default function CertificatesListPage() {
                                 View
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex items-center gap-2">
-                              <Edit className="h-4 w-4" />
-                              Edit
+                            <DropdownMenuItem asChild className="flex items-center gap-2">
+                              <Link to={`/admin/certificates/${cert.id}/edit`}>
+                                <Edit className="h-4 w-4" />
+                                Edit
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="flex items-center gap-2 text-destructive"
