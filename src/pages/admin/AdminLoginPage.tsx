@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Award, Eye, EyeOff, Lock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +16,7 @@ const loginSchema = z.object({
 });
 
 export default function AdminLoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signIn, user, isAdmin, isLoading: authLoading } = useAuth();
@@ -33,13 +35,13 @@ export default function AdminLoginPage() {
         navigate("/admin/dashboard");
       } else {
         toast({
-          title: "Access Denied",
-          description: "You don't have admin privileges.",
+          title: t("admin.login.accessDenied"),
+          description: t("admin.login.noPrivileges"),
           variant: "destructive",
         });
       }
     }
-  }, [user, isAdmin, authLoading, navigate, toast]);
+  }, [user, isAdmin, authLoading, navigate, toast, t]);
 
   const validateForm = () => {
     try {
@@ -71,14 +73,14 @@ export default function AdminLoginPage() {
     
     if (error) {
       toast({
-        title: "Login Failed",
-        description: error.message || "Invalid email or password.",
+        title: t("admin.login.failed"),
+        description: error.message || t("admin.login.invalidCredentials"),
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Login Successful",
-        description: "Welcome to the admin dashboard.",
+        title: t("admin.login.success"),
+        description: t("admin.login.welcomeBack"),
       });
     }
 
@@ -121,9 +123,9 @@ export default function AdminLoginPage() {
               <Award className="h-8 w-8 text-primary-foreground" />
             </div>
             <div>
-              <CardTitle className="text-2xl">Admin Login</CardTitle>
+              <CardTitle className="text-2xl">{t("admin.login.title")}</CardTitle>
               <CardDescription>
-                Sign in to access the certificate management dashboard
+                {t("admin.login.subtitle")}
               </CardDescription>
             </div>
           </CardHeader>
@@ -132,13 +134,13 @@ export default function AdminLoginPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-foreground">
-                  Email
+                  {t("admin.login.email")}
                 </label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("admin.login.emailPlaceholder")}
                   value={credentials.email}
                   onChange={handleChange}
                   required
@@ -151,14 +153,14 @@ export default function AdminLoginPage() {
 
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-foreground">
-                  Password
+                  {t("admin.login.password")}
                 </label>
                 <div className="relative">
                   <Input
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={t("admin.login.passwordPlaceholder")}
                     value={credentials.password}
                     onChange={handleChange}
                     required
@@ -185,11 +187,11 @@ export default function AdminLoginPage() {
                 className="w-full"
               >
                 {isLoading ? (
-                  "Signing in..."
+                  t("admin.login.signingIn")
                 ) : (
                   <>
                     <Lock className="mr-2 h-4 w-4" />
-                    Sign In
+                    {t("admin.login.signIn")}
                   </>
                 )}
               </Button>
@@ -197,14 +199,14 @@ export default function AdminLoginPage() {
 
             <div className="mt-6 rounded-lg bg-muted p-4">
               <p className="text-center text-xs text-muted-foreground">
-                Contact your administrator if you need access to this system.
+                {t("admin.login.contactAdmin")}
               </p>
             </div>
           </CardContent>
         </Card>
 
         <p className="mt-6 text-center text-sm text-primary-foreground/60">
-          Protected admin area. Unauthorized access is prohibited.
+          {t("admin.login.protectedArea")}
         </p>
       </motion.div>
     </div>

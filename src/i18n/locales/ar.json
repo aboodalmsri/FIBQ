@@ -12,8 +12,9 @@
     "status": "الحالة",
     "active": "نشط",
     "suspended": "معلق",
-    "expired": "منتهي",
+    "expired": "منتهي الصلاحية",
     "revoked": "ملغى",
+    "valid": "صالح",
     "name": "الاسم",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
@@ -32,197 +33,95 @@
     "about": "من نحن",
     "contact": "اتصل بنا",
     "verify": "التحقق من الشهادة",
-    "admin": "الإدارة",
+    "admin": "المشرف",
     "dashboard": "لوحة التحكم",
     "certificates": "الشهادات",
     "templates": "القوالب",
-    "admins": "المسؤولين",
+    "admins": "المشرفون",
     "logout": "تسجيل الخروج"
   },
   "home": {
     "hero": {
-      "title": "التحقق المهني من الشهادات",
-      "subtitle": "تحقق آمن وفوري لشهادات التدريب",
-      "cta": "التحقق من الشهادة"
+      "title": "شهادة رقمية",
+      "subtitle": "منصة التحقق",
+      "description": "تحقق فوراً من صحة الشهادات الرسمية باستخدام منصتنا الآمنة.",
+      "placeholder": "أدخل رقم الشهادة...",
+      "verifyNow": "تحقق الآن",
+      "qrHint": "أو امسح رمز QR على شهادتك للتحقق الفوري"
+    },
+    "stats": {
+      "certificatesIssued": "الشهادات الصادرة",
+      "verificationAccuracy": "دقة التحقق",
+      "availableAnytime": "متاح دائماً",
+      "partnerInstitutions": "المؤسسات الشريكة"
     },
     "features": {
-      "title": "لماذا تختار FIBQ",
-      "secure": {
-        "title": "آمن ومُعتمد",
-        "description": "جميع الشهادات مؤمنة بتشفير ويمكن التحقق منها فوراً"
-      },
-      "instant": {
-        "title": "تحقق فوري",
-        "description": "تحقق من أي شهادة في ثوانٍ باستخدام نظام رمز QR"
-      },
-      "trusted": {
-        "title": "موثوق عالمياً",
-        "description": "معترف به من قبل المنظمات والمؤسسات حول العالم"
-      }
+      "title": "لماذا تختار منصتنا؟",
+      "description": "مبنية على الأمان والثقة.",
+      "secure": { "title": "أمان مقاوم للتلاعب", "description": "تشفير متقدم ومعرفات فريدة." },
+      "instant": { "title": "تحقق فوري", "description": "تحقق من أي شهادة في ثوانٍ." },
+      "qrCode": { "title": "الوصول عبر رمز QR", "description": "كل شهادة تتضمن رمز QR فريد." },
+      "official": { "title": "التحقق الرسمي", "description": "جميع الشهادات موقعة رقمياً." }
+    },
+    "cta": {
+      "title": "هل أنت مستعد للتحقق من شهادة؟",
+      "description": "أدخل رقم شهادتك أعلاه.",
+      "verifyButton": "انتقل إلى صفحة التحقق",
+      "learnMore": "تعرف علينا أكثر"
     }
   },
   "verify": {
-    "title": "التحقق من الشهادة",
-    "subtitle": "أدخل رقم الشهادة للتحقق من صحتها",
-    "placeholder": "أدخل رقم الشهادة (مثال: FIBQ-XXXX-XXXX)",
+    "hero": { "title": "التحقق من", "highlight": "الشهادة", "subtitle": "أدخل رقم شهادتك أدناه." },
+    "placeholder": "أدخل رقم الشهادة",
     "button": "تحقق",
     "scanning": "جاري البحث...",
+    "searching": "جاري البحث عن الشهادة...",
+    "qrHint": "يمكنك أيضاً مسح رمز QR",
+    "downloadPNG": "تحميل PNG",
+    "downloadPDF": "تحميل PDF",
+    "verified": { "title": "تم التحقق من الشهادة", "subtitle": "هذه الشهادة أصلية." },
     "notFound": {
       "title": "الشهادة غير موجودة",
-      "description": "لم نتمكن من العثور على شهادة بالرقم الذي أدخلته.",
-      "tips": {
-        "title": "نصائح:",
-        "format": "أرقام الشهادات تتبع التنسيق: FIBQ-XXXX-XXXX",
-        "check": "تأكد من إدخال رقم الشهادة بشكل صحيح",
-        "qr": "حاول مسح رمز QR الموجود على الشهادة المادية",
-        "support": "تواصل مع الدعم إذا كنت تعتقد أن هناك خطأ"
-      }
+      "description": "لم نتمكن من العثور على شهادة بهذا الرقم.",
+      "tips": { "title": "نصائح:", "format": "الصيغة: FIBQ-XXXX-XXXX", "check": "تأكد من الرقم", "qr": "جرب مسح رمز QR", "support": "تواصل مع الدعم" }
     },
-    "verified": {
-      "title": "تم التحقق من الشهادة",
-      "authentic": "هذه الشهادة أصلية وصالحة",
-      "holder": "حامل الشهادة",
-      "program": "البرنامج التدريبي",
-      "center": "مركز التدريب",
-      "issueDate": "تاريخ الإصدار",
-      "expiryDate": "تاريخ الانتهاء",
-      "certificateNumber": "رقم الشهادة",
-      "status": "الحالة"
-    }
+    "howTo": { "title": "كيفية التحقق", "description": "أدخل الرقم أو امسح رمز QR.", "formatTitle": "صيغة الرقم:", "formatHint": "أدخل الرقم كما يظهر." }
   },
   "about": {
-    "title": "عن FIBQ",
-    "subtitle": "رائدون في الاعتماد والشهادات المهنية",
-    "mission": {
-      "title": "مهمتنا",
-      "description": "تقديم خدمات اعتماد وشهادات عالمية المستوى تمكّن المهنيين والمؤسسات من تحقيق التميز."
+    "hero": { "title": "حول", "subtitle": "نحن ملتزمون ببناء الثقة." },
+    "mission": { "label": "مهمتنا", "title": "القضاء على تزوير الشهادات", "description": "مهمتنا هي التحقق الفوري.", "point1": "تحقق آمن", "point2": "نتائج فورية", "point3": "وصول مجاني" },
+    "vision": { "title": "رؤيتنا", "description": "أن نصبح المعيار العالمي." },
+    "values": {
+      "title": "قيمنا الأساسية",
+      "subtitle": "هذه المبادئ توجهنا.",
+      "integrity": { "title": "النزاهة", "description": "أعلى معايير الأمان." },
+      "transparency": { "title": "الشفافية", "description": "عمليات شفافة." },
+      "accessibility": { "title": "إمكانية الوصول", "description": "وصول مجاني للجميع." },
+      "accuracy": { "title": "الدقة", "description": "دقة 99.9%." }
     },
-    "vision": {
-      "title": "رؤيتنا",
-      "description": "أن نكون المعيار العالمي للشهادات المهنية، معروفين بالنزاهة والابتكار والتأثير."
+    "journey": { "title": "رحلتنا", "subtitle": "من مشروع صغير إلى منصة عالمية." },
+    "timeline": {
+      "2018": { "title": "إطلاق المنصة", "description": "بدأت كمشروع صغير." },
+      "2020": { "title": "دمج رمز QR", "description": "إدخال مسح QR." },
+      "2022": { "title": "100+ شريك", "description": "100 شراكة مؤسسية." },
+      "2024": { "title": "التوسع العالمي", "description": "نخدم العالم." }
     }
   },
   "contact": {
-    "title": "اتصل بنا",
-    "subtitle": "تواصل مع فريقنا",
-    "form": {
-      "name": "اسمك",
-      "email": "البريد الإلكتروني",
-      "subject": "الموضوع",
-      "message": "الرسالة",
-      "send": "إرسال الرسالة"
-    },
+    "hero": { "title": "تواصل", "highlight": "معنا", "subtitle": "نحن هنا للمساعدة." },
     "info": {
       "title": "معلومات الاتصال",
-      "address": "العنوان",
-      "phone": "الهاتف",
-      "emailLabel": "البريد الإلكتروني"
-    }
+      "subtitle": "تواصل معنا.",
+      "email": { "title": "راسلنا", "description": "نرد خلال 24 ساعة" },
+      "phone": { "title": "اتصل بنا", "description": "الإثنين-الجمعة" },
+      "address": { "title": "زرنا", "description": "نيويورك" }
+    },
+    "form": { "title": "أرسل رسالة", "name": "الاسم", "namePlaceholder": "أحمد", "email": "البريد", "emailPlaceholder": "ahmed@example.com", "subject": "الموضوع", "subjectPlaceholder": "كيف نساعدك؟", "message": "الرسالة", "messagePlaceholder": "أخبرنا...", "send": "إرسال", "sending": "جاري الإرسال...", "successTitle": "تم الإرسال!", "successMessage": "سنرد قريباً." }
   },
   "admin": {
-    "dashboard": {
-      "title": "لوحة التحكم",
-      "welcome": "مرحباً بعودتك",
-      "stats": {
-        "totalCertificates": "إجمالي الشهادات",
-        "thisMonth": "هذا الشهر",
-        "activeTemplates": "القوالب النشطة"
-      }
-    },
-    "certificates": {
-      "title": "جميع الشهادات",
-      "subtitle": "إدارة وعرض جميع الشهادات الصادرة",
-      "create": "إنشاء شهادة",
-      "edit": "تعديل الشهادة",
-      "holder": "الحامل",
-      "program": "البرنامج",
-      "center": "المركز",
-      "date": "التاريخ",
-      "noCertificates": "لا توجد شهادات بعد. أنشئ أول شهادة!",
-      "noResults": "لم يتم العثور على شهادات تطابق بحثك.",
-      "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذه الشهادة؟"
-    },
-    "createCertificate": {
-      "title": "إنشاء شهادة",
-      "editTitle": "تعديل الشهادة",
-      "subtitle": "صمم وأنشئ شهادة جديدة بجميع الحقول المطلوبة",
-      "editSubtitle": "تحديث تفاصيل الشهادة",
-      "tabs": {
-        "details": "التفاصيل",
-        "issuer": "معلومات المُصدر",
-        "template": "القالب"
-      },
-      "fields": {
-        "certificateType": "نوع الشهادة",
-        "certificateNumber": "رقم الشهادة",
-        "traineeName": "الاسم الكامل للمتدرب",
-        "traineePhoto": "صورة المتدرب (اختياري)",
-        "trainingProgram": "اسم البرنامج التدريبي",
-        "certificateTitle": "عنوان/وصف الشهادة",
-        "atcCode": "رمز ATC (مركز التدريب المعتمد)",
-        "dateOfIssue": "تاريخ الإصدار",
-        "placeOfIssue": "مكان الإصدار",
-        "chairpersonName": "اسم الموقّع/رئيس المجلس",
-        "chairpersonTitle": "لقب الرئيس",
-        "legalDisclaimer": "إخلاء المسؤولية القانونية",
-        "showSeal": "إظهار الختم الرسمي",
-        "showQRCode": "تضمين رمز QR"
-      },
-      "generate": "توليد",
-      "saveCertificate": "حفظ الشهادة",
-      "updateCertificate": "تحديث الشهادة",
-      "creating": "جاري الإنشاء...",
-      "updating": "جاري التحديث...",
-      "preview": {
-        "title": "معاينة مباشرة",
-        "subtitle": "يتم تحديث الشهادة أثناء الكتابة",
-        "exportNote": "قم بالتصدير بدقة كاملة للطباعة. المعاينة معروضة بمقياس 60%."
-      }
-    },
-    "templates": {
-      "title": "قوالب الشهادات",
-      "subtitle": "إدارة وتخصيص تصميمات الشهادات",
-      "create": "إنشاء قالب"
-    },
-    "admins": {
-      "title": "إدارة المسؤولين",
-      "subtitle": "إدارة حسابات المسؤولين والصلاحيات",
-      "addAdmin": "إضافة مسؤول",
-      "totalAdmins": "إجمالي المسؤولين",
-      "activeAdmins": "نشط",
-      "suspendedAdmins": "معلق",
-      "role": "الدور",
-      "added": "تمت الإضافة",
-      "superAdmin": "المسؤول الرئيسي",
-      "createDialog": {
-        "title": "إنشاء مسؤول جديد",
-        "subtitle": "إضافة مسؤول جديد للنظام"
-      },
-      "editDialog": {
-        "title": "تعديل المسؤول",
-        "subtitle": "تحديث تفاصيل المسؤول"
-      },
-      "deleteDialog": {
-        "title": "إزالة المسؤول؟",
-        "description": "سيتم إزالة صلاحيات المسؤول. لن يتمكن بعد ذلك من الوصول إلى لوحة التحكم."
-      },
-      "suspend": "تعليق",
-      "activate": "تفعيل",
-      "remove": "إزالة",
-      "fullName": "الاسم الكامل"
-    },
-    "login": {
-      "title": "تسجيل دخول المسؤول",
-      "subtitle": "سجل الدخول للوصول إلى لوحة التحكم",
-      "email": "البريد الإلكتروني",
-      "password": "كلمة المرور",
-      "signIn": "تسجيل الدخول",
-      "signingIn": "جاري تسجيل الدخول..."
-    }
+    "dashboard": { "title": "لوحة التحكم", "welcome": "مرحباً بعودتك!", "recentCertificates": "الشهادات الأخيرة", "viewAll": "عرض الكل", "stats": { "totalCertificates": "إجمالي الشهادات", "thisMonth": "هذا الشهر", "verificationsToday": "التحققات اليوم", "activeTemplates": "القوالب النشطة" }, "quickActions": { "newCertificate": "شهادة جديدة", "createAndIssue": "إنشاء وإصدار", "viewAll": "عرض الكل", "manageCertificates": "إدارة الشهادات", "templates": "القوالب", "manageDesigns": "إدارة التصاميم" } },
+    "certificates": { "title": "جميع الشهادات", "subtitle": "إدارة الشهادات", "create": "إنشاء شهادة", "edit": "تعديل", "holder": "حامل الشهادة", "program": "البرنامج", "center": "المركز", "date": "التاريخ", "certificateNumber": "رقم الشهادة", "noCertificates": "لا توجد شهادات.", "noResults": "لا نتائج.", "deleteConfirm": "هل أنت متأكد؟" },
+    "login": { "title": "تسجيل الدخول", "subtitle": "سجّل للوصول", "email": "البريد", "emailPlaceholder": "أدخل بريدك", "password": "كلمة المرور", "passwordPlaceholder": "أدخل كلمة المرور", "signIn": "تسجيل الدخول", "signingIn": "جاري...", "accessDenied": "تم الرفض", "noPrivileges": "ليس لديك صلاحيات.", "failed": "فشل", "invalidCredentials": "بيانات غير صحيحة.", "success": "نجاح", "welcomeBack": "مرحباً.", "contactAdmin": "تواصل مع المسؤول.", "protectedArea": "منطقة محمية." }
   },
-  "footer": {
-    "rights": "جميع الحقوق محفوظة",
-    "privacy": "سياسة الخصوصية",
-    "terms": "شروط الخدمة"
-  }
+  "footer": { "brandSubtitle": "المجلس الدولي الفرنسي للجودة", "description": "تحقق آمن وموثوق.", "quickLinks": "روابط سريعة", "contactUs": "اتصل بنا", "trustedPlatform": "منصة موثوقة", "secure": "آمن 100%", "verified": "موثق ومحمي", "rights": "جميع الحقوق محفوظة.", "privacy": "الخصوصية", "terms": "الشروط" }
 }

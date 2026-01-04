@@ -14,6 +14,7 @@
     "suspended": "Suspended",
     "expired": "Expired",
     "revoked": "Revoked",
+    "valid": "Valid",
     "name": "Name",
     "email": "Email",
     "password": "Password",
@@ -41,32 +42,63 @@
   },
   "home": {
     "hero": {
-      "title": "Professional Certificate Verification",
-      "subtitle": "Secure, instant verification for training certificates",
-      "cta": "Verify Certificate"
+      "title": "Digital Certificate",
+      "subtitle": "Verification Platform",
+      "description": "Instantly verify the authenticity of official certificates using our secure platform. Search by certificate number or scan the QR code for immediate validation.",
+      "placeholder": "Enter certificate number...",
+      "verifyNow": "Verify Now",
+      "qrHint": "Or scan the QR code on your certificate for instant verification"
+    },
+    "stats": {
+      "certificatesIssued": "Certificates Issued",
+      "verificationAccuracy": "Verification Accuracy",
+      "availableAnytime": "Available Anytime",
+      "partnerInstitutions": "Partner Institutions"
     },
     "features": {
-      "title": "Why Choose FIBQ",
+      "title": "Why Choose Our Platform?",
+      "description": "Built with security and trust at its core, our platform ensures every certificate verification is accurate, fast, and reliable.",
       "secure": {
-        "title": "Secure & Verified",
-        "description": "All certificates are cryptographically secured and instantly verifiable"
+        "title": "Tamper-Proof Security",
+        "description": "Advanced encryption and unique identifiers prevent certificate forgery and duplication."
       },
       "instant": {
         "title": "Instant Verification",
-        "description": "Verify any certificate in seconds using our QR code system"
+        "description": "Verify any certificate in seconds using our search or QR code scanning system."
       },
-      "trusted": {
-        "title": "Trusted Worldwide",
-        "description": "Recognized by organizations and institutions globally"
+      "qrCode": {
+        "title": "QR Code Access",
+        "description": "Each certificate includes a unique QR code for quick mobile verification."
+      },
+      "official": {
+        "title": "Official Validation",
+        "description": "All certificates are digitally signed and officially validated by the issuing authority."
       }
+    },
+    "cta": {
+      "title": "Ready to Verify a Certificate?",
+      "description": "Enter your certificate number above or use our dedicated verification page for more options including QR code scanning.",
+      "verifyButton": "Go to Verification Page",
+      "learnMore": "Learn More About Us"
     }
   },
   "verify": {
-    "title": "Verify Certificate",
-    "subtitle": "Enter the certificate number to verify its authenticity",
-    "placeholder": "Enter certificate number (e.g., FIBQ-XXXX-XXXX)",
+    "hero": {
+      "title": "Verify",
+      "highlight": "Certificate",
+      "subtitle": "Enter your certificate number below or scan the QR code on your certificate for instant verification."
+    },
+    "placeholder": "Enter certificate number (e.g., FIBQ-A1B2-C3D4)",
     "button": "Verify",
     "scanning": "Searching...",
+    "searching": "Searching for certificate...",
+    "qrHint": "You can also scan the QR code printed on the certificate",
+    "downloadPNG": "Download PNG",
+    "downloadPDF": "Download PDF",
+    "verified": {
+      "title": "Certificate Verified",
+      "subtitle": "This certificate is authentic and officially issued."
+    },
     "notFound": {
       "title": "Certificate Not Found",
       "description": "We couldn't find a certificate with the number you provided.",
@@ -78,55 +110,130 @@
         "support": "Contact support if you believe this is an error"
       }
     },
-    "verified": {
-      "title": "Certificate Verified",
-      "authentic": "This certificate is authentic and valid",
-      "holder": "Certificate Holder",
-      "program": "Training Program",
-      "center": "Training Center",
-      "issueDate": "Issue Date",
-      "expiryDate": "Expiry Date",
-      "certificateNumber": "Certificate Number",
-      "status": "Status"
+    "howTo": {
+      "title": "How to Verify",
+      "description": "Enter your certificate number in the search field above or scan the QR code printed on your certificate.",
+      "formatTitle": "Certificate Number Format:",
+      "formatHint": "Enter the certificate number exactly as it appears on your certificate."
     }
   },
   "about": {
-    "title": "About FIBQ",
-    "subtitle": "Leading the way in professional certification and accreditation",
+    "hero": {
+      "title": "About",
+      "subtitle": "We are dedicated to building trust through secure, transparent, and accessible digital certificate verification."
+    },
     "mission": {
-      "title": "Our Mission",
-      "description": "To provide world-class certification and accreditation services that empower professionals and organizations to achieve excellence."
+      "label": "Our Mission",
+      "title": "Eliminating Certificate Fraud Worldwide",
+      "description": "Our mission is to create a world where every certificate can be instantly verified, eliminating fraud and building trust between institutions and individuals. We believe that authentic credentials should be easily verifiable by anyone, anywhere.",
+      "point1": "Secure Verification",
+      "point2": "Instant Results",
+      "point3": "Free Access"
     },
     "vision": {
       "title": "Our Vision",
-      "description": "To be the global standard for professional certification, recognized for integrity, innovation, and impact."
+      "description": "To become the global standard for digital certificate verification, trusted by institutions, employers, and individuals worldwide."
+    },
+    "values": {
+      "title": "Our Core Values",
+      "subtitle": "These principles guide everything we do at FIBQ.",
+      "integrity": {
+        "title": "Integrity",
+        "description": "We maintain the highest standards of data security and certificate authenticity."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "description": "Every verification is traceable and our processes are fully transparent."
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "description": "Free public access to certificate verification for everyone, anywhere."
+      },
+      "accuracy": {
+        "title": "Accuracy",
+        "description": "99.9% verification accuracy backed by advanced validation systems."
+      }
+    },
+    "journey": {
+      "title": "Our Journey",
+      "subtitle": "From a small project to a global verification platform."
+    },
+    "timeline": {
+      "2018": {
+        "title": "Platform Launch",
+        "description": "Started as a small project to digitize academic certificates."
+      },
+      "2020": {
+        "title": "QR Integration",
+        "description": "Introduced QR code scanning for instant mobile verification."
+      },
+      "2022": {
+        "title": "100+ Partners",
+        "description": "Reached milestone of 100 institutional partnerships."
+      },
+      "2024": {
+        "title": "Global Expansion",
+        "description": "Now serving institutions and individuals worldwide."
+      }
     }
   },
   "contact": {
-    "title": "Contact Us",
-    "subtitle": "Get in touch with our team",
-    "form": {
-      "name": "Your Name",
-      "email": "Email Address",
-      "subject": "Subject",
-      "message": "Message",
-      "send": "Send Message"
+    "hero": {
+      "title": "Get in",
+      "highlight": "Touch",
+      "subtitle": "Have questions about certificate verification? We're here to help."
     },
     "info": {
       "title": "Contact Information",
-      "address": "Address",
-      "phone": "Phone",
-      "emailLabel": "Email"
+      "subtitle": "Reach out through any of these channels and we'll respond promptly.",
+      "email": {
+        "title": "Email Us",
+        "description": "We'll respond within 24 hours"
+      },
+      "phone": {
+        "title": "Call Us",
+        "description": "Mon-Fri, 9AM to 6PM EST"
+      },
+      "address": {
+        "title": "Visit Us",
+        "description": "New York, NY 10001"
+      }
+    },
+    "form": {
+      "title": "Send us a Message",
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help you?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us more about your inquiry...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "successTitle": "Message Sent!",
+      "successMessage": "Thank you for contacting us. We'll get back to you soon."
     }
   },
   "admin": {
     "dashboard": {
       "title": "Dashboard",
-      "welcome": "Welcome back",
+      "welcome": "Welcome back! Here's an overview of your certificates.",
+      "recentCertificates": "Recent Certificates",
+      "viewAll": "View All",
       "stats": {
         "totalCertificates": "Total Certificates",
         "thisMonth": "This Month",
+        "verificationsToday": "Verifications Today",
         "activeTemplates": "Active Templates"
+      },
+      "quickActions": {
+        "newCertificate": "New Certificate",
+        "createAndIssue": "Create and issue",
+        "viewAll": "View All",
+        "manageCertificates": "Manage certificates",
+        "templates": "Templates",
+        "manageDesigns": "Manage designs"
       }
     },
     "certificates": {
@@ -138,6 +245,7 @@
       "program": "Program",
       "center": "Center",
       "date": "Date",
+      "certificateNumber": "Certificate #",
       "noCertificates": "No certificates yet. Create your first certificate!",
       "noResults": "No certificates found matching your search.",
       "deleteConfirm": "Are you sure you want to delete this certificate?"
@@ -213,15 +321,32 @@
     },
     "login": {
       "title": "Admin Login",
-      "subtitle": "Sign in to access the admin dashboard",
+      "subtitle": "Sign in to access the certificate management dashboard",
       "email": "Email",
+      "emailPlaceholder": "Enter your email",
       "password": "Password",
+      "passwordPlaceholder": "Enter your password",
       "signIn": "Sign In",
-      "signingIn": "Signing in..."
+      "signingIn": "Signing in...",
+      "accessDenied": "Access Denied",
+      "noPrivileges": "You don't have admin privileges.",
+      "failed": "Login Failed",
+      "invalidCredentials": "Invalid email or password.",
+      "success": "Login Successful",
+      "welcomeBack": "Welcome to the admin dashboard.",
+      "contactAdmin": "Contact your administrator if you need access to this system.",
+      "protectedArea": "Protected admin area. Unauthorized access is prohibited."
     }
   },
   "footer": {
-    "rights": "All rights reserved",
+    "brandSubtitle": "French International Board for Quality",
+    "description": "Secure, reliable, and instant certificate verification for institutions and individuals worldwide.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "trustedPlatform": "Trusted Platform",
+    "secure": "100% Secure",
+    "verified": "Verified & Protected",
+    "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   }

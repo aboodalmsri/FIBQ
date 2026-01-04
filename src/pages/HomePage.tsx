@@ -2,43 +2,45 @@ import { motion } from "framer-motion";
 import { Award, CheckCircle, QrCode, Search, Shield, Zap } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 
-const features = [
-  {
-    icon: Shield,
-    title: "Tamper-Proof Security",
-    description: "Advanced encryption and unique identifiers prevent certificate forgery and duplication.",
-  },
-  {
-    icon: Zap,
-    title: "Instant Verification",
-    description: "Verify any certificate in seconds using our search or QR code scanning system.",
-  },
-  {
-    icon: QrCode,
-    title: "QR Code Access",
-    description: "Each certificate includes a unique QR code for quick mobile verification.",
-  },
-  {
-    icon: CheckCircle,
-    title: "Official Validation",
-    description: "All certificates are digitally signed and officially validated by the issuing authority.",
-  },
-];
-
-const stats = [
-  { value: "50K+", label: "Certificates Issued" },
-  { value: "99.9%", label: "Verification Accuracy" },
-  { value: "24/7", label: "Available Anytime" },
-  { value: "100+", label: "Partner Institutions" },
-];
-
 export default function HomePage() {
+  const { t } = useTranslation();
   const [certificateNumber, setCertificateNumber] = useState("");
   const navigate = useNavigate();
+
+  const features = [
+    {
+      icon: Shield,
+      titleKey: "home.features.secure.title",
+      descriptionKey: "home.features.secure.description",
+    },
+    {
+      icon: Zap,
+      titleKey: "home.features.instant.title",
+      descriptionKey: "home.features.instant.description",
+    },
+    {
+      icon: QrCode,
+      titleKey: "home.features.qrCode.title",
+      descriptionKey: "home.features.qrCode.description",
+    },
+    {
+      icon: CheckCircle,
+      titleKey: "home.features.official.title",
+      descriptionKey: "home.features.official.description",
+    },
+  ];
+
+  const stats = [
+    { value: "50K+", labelKey: "home.stats.certificatesIssued" },
+    { value: "99.9%", labelKey: "home.stats.verificationAccuracy" },
+    { value: "24/7", labelKey: "home.stats.availableAnytime" },
+    { value: "100+", labelKey: "home.stats.partnerInstitutions" },
+  ];
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,8 +78,8 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mb-6 font-heading text-4xl font-bold tracking-tight text-primary-foreground md:text-5xl lg:text-6xl"
             >
-              Digital Certificate
-              <span className="block text-secondary">Verification Platform</span>
+              {t("home.hero.title")}
+              <span className="block text-secondary">{t("home.hero.subtitle")}</span>
             </motion.h1>
 
             <motion.p
@@ -86,8 +88,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mx-auto mb-10 max-w-2xl text-lg text-primary-foreground/80 md:text-xl"
             >
-              Instantly verify the authenticity of official certificates using our secure platform. 
-              Search by certificate number or scan the QR code for immediate validation.
+              {t("home.hero.description")}
             </motion.p>
 
             {/* Search Form */}
@@ -105,14 +106,14 @@ export default function HomePage() {
                     <Input
                       variant="hero"
                       inputSize="lg"
-                      placeholder="Enter certificate number..."
+                      placeholder={t("home.hero.placeholder")}
                       value={certificateNumber}
                       onChange={(e) => setCertificateNumber(e.target.value)}
                       className="pl-12"
                     />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="shrink-0">
-                    Verify Now
+                    {t("home.hero.verifyNow")}
                   </Button>
                 </div>
               </Card>
@@ -125,7 +126,7 @@ export default function HomePage() {
               className="mt-6 text-sm text-primary-foreground/60"
             >
               <QrCode className="mr-2 inline-block h-4 w-4" />
-              Or scan the QR code on your certificate for instant verification
+              {t("home.hero.qrHint")}
             </motion.p>
           </div>
         </div>
@@ -137,7 +138,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
               <motion.div
-                key={stat.label}
+                key={stat.labelKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -147,7 +148,7 @@ export default function HomePage() {
                 <p className="font-heading text-3xl font-bold text-secondary md:text-4xl">
                   {stat.value}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</p>
               </motion.div>
             ))}
           </div>
@@ -164,18 +165,17 @@ export default function HomePage() {
             className="mx-auto mb-12 max-w-2xl text-center"
           >
             <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
-              Why Choose Our Platform?
+              {t("home.features.title")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Built with security and trust at its core, our platform ensures every certificate 
-              verification is accurate, fast, and reliable.
+              {t("home.features.description")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature, index) => (
               <motion.div
-                key={feature.title}
+                key={feature.titleKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -187,10 +187,10 @@ export default function HomePage() {
                       <feature.icon className="h-7 w-7 text-secondary" />
                     </div>
                     <h3 className="mb-2 font-heading text-xl font-semibold text-foreground">
-                      {feature.title}
+                      {t(feature.titleKey)}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      {feature.description}
+                      {t(feature.descriptionKey)}
                     </p>
                   </CardContent>
                 </Card>
@@ -214,18 +214,17 @@ export default function HomePage() {
                 <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-secondary/10 blur-2xl" />
                 <div className="relative text-center">
                   <h2 className="mb-4 font-heading text-2xl font-bold text-foreground md:text-3xl">
-                    Ready to Verify a Certificate?
+                    {t("home.cta.title")}
                   </h2>
                   <p className="mb-8 text-muted-foreground">
-                    Enter your certificate number above or use our dedicated verification page 
-                    for more options including QR code scanning.
+                    {t("home.cta.description")}
                   </p>
                   <div className="flex flex-col justify-center gap-4 sm:flex-row">
                     <Button asChild variant="gold" size="lg">
-                      <a href="/verify">Go to Verification Page</a>
+                      <a href="/verify">{t("home.cta.verifyButton")}</a>
                     </Button>
                     <Button asChild variant="outline" size="lg">
-                      <a href="/about">Learn More About Us</a>
+                      <a href="/about">{t("home.cta.learnMore")}</a>
                     </Button>
                   </div>
                 </div>

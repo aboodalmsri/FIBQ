@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle, Download, FileImage, QrCode, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { useCertificateExport } from "@/hooks/useCertificateExport";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function VerifyPage() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchNumber, setSearchNumber] = useState(searchParams.get("number") || "");
   const [isSearching, setIsSearching] = useState(false);
@@ -174,11 +176,10 @@ export default function VerifyPage() {
             className="mx-auto max-w-3xl text-center"
           >
             <h1 className="mb-6 font-heading text-4xl font-bold text-primary-foreground md:text-5xl">
-              Verify <span className="text-secondary">Certificate</span>
+              {t("verify.hero.title")} <span className="text-secondary">{t("verify.hero.highlight")}</span>
             </h1>
             <p className="mb-8 text-lg text-primary-foreground/80 md:text-xl">
-              Enter your certificate number below or scan the QR code on your certificate
-              for instant verification.
+              {t("verify.hero.subtitle")}
             </p>
 
             {/* Search Form */}
@@ -190,7 +191,7 @@ export default function VerifyPage() {
                     <Input
                       variant="hero"
                       inputSize="lg"
-                      placeholder="Enter certificate number (e.g., FIBQ-A1B2-C3D4)"
+                      placeholder={t("verify.placeholder")}
                       value={searchNumber}
                       onChange={(e) => setSearchNumber(e.target.value.toUpperCase())}
                       className="pl-12 font-mono"
@@ -203,7 +204,7 @@ export default function VerifyPage() {
                     disabled={isSearching}
                     className="shrink-0"
                   >
-                    {isSearching ? "Searching..." : "Verify"}
+                    {isSearching ? t("verify.scanning") : t("verify.button")}
                   </Button>
                 </div>
               </Card>
@@ -211,7 +212,7 @@ export default function VerifyPage() {
 
             <p className="mt-6 text-sm text-primary-foreground/60">
               <QrCode className="mr-2 inline-block h-4 w-4" />
-              You can also scan the QR code printed on the certificate
+              {t("verify.qrHint")}
             </p>
           </motion.div>
         </div>
@@ -227,7 +228,7 @@ export default function VerifyPage() {
               className="mx-auto max-w-2xl text-center"
             >
               <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-secondary" />
-              <p className="mt-4 text-muted-foreground">Searching for certificate...</p>
+              <p className="mt-4 text-muted-foreground">{t("verify.searching")}</p>
             </motion.div>
           )}
 
@@ -249,10 +250,10 @@ export default function VerifyPage() {
                           </div>
                           <div>
                             <CardTitle className="text-xl text-foreground">
-                              Certificate Verified
+                              {t("verify.verified.title")}
                             </CardTitle>
                             <p className="text-sm text-muted-foreground">
-                              This certificate is authentic and officially issued.
+                              {t("verify.verified.subtitle")}
                             </p>
                           </div>
                         </div>
@@ -262,7 +263,7 @@ export default function VerifyPage() {
                               searchResult.certificate.status
                             )}`}
                           >
-                            {searchResult.certificate.status}
+                            {t(`common.${searchResult.certificate.status}`)}
                           </span>
                         </div>
                       </div>
@@ -277,7 +278,7 @@ export default function VerifyPage() {
                           disabled={isExporting}
                         >
                           <FileImage className="mr-2 h-4 w-4" />
-                          Download PNG
+                          {t("verify.downloadPNG")}
                         </Button>
                         <Button
                           variant="secondary"
@@ -286,7 +287,7 @@ export default function VerifyPage() {
                           disabled={isExporting}
                         >
                           <Download className="mr-2 h-4 w-4" />
-                          Download PDF
+                          {t("verify.downloadPDF")}
                         </Button>
                       </div>
 
@@ -313,10 +314,10 @@ export default function VerifyPage() {
                       </div>
                       <div>
                         <CardTitle className="text-xl text-foreground">
-                          Certificate Not Found
+                          {t("verify.notFound.title")}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground">
-                          We couldn't find a certificate with the number you provided.
+                          {t("verify.notFound.description")}
                         </p>
                       </div>
                     </div>
@@ -324,13 +325,13 @@ export default function VerifyPage() {
                   <CardContent className="p-6 pt-0">
                     <div className="rounded-lg bg-muted p-4">
                       <p className="text-sm text-muted-foreground">
-                        <strong className="text-foreground">Tips:</strong>
+                        <strong className="text-foreground">{t("verify.notFound.tips.title")}</strong>
                       </p>
                       <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                        <li>Certificate numbers follow the format: FIBQ-XXXX-XXXX</li>
-                        <li>Check that you've entered the certificate number correctly</li>
-                        <li>Try scanning the QR code on the physical certificate</li>
-                        <li>Contact support if you believe this is an error</li>
+                        <li>{t("verify.notFound.tips.format")}</li>
+                        <li>{t("verify.notFound.tips.check")}</li>
+                        <li>{t("verify.notFound.tips.qr")}</li>
+                        <li>{t("verify.notFound.tips.support")}</li>
                       </ul>
                     </div>
                   </CardContent>
@@ -351,21 +352,20 @@ export default function VerifyPage() {
                 <div className="text-center">
                   <QrCode className="mx-auto mb-4 h-12 w-12 text-secondary" />
                   <h3 className="mb-2 font-heading text-xl font-semibold text-foreground">
-                    How to Verify
+                    {t("verify.howTo.title")}
                   </h3>
                   <p className="mb-6 text-muted-foreground">
-                    Enter your certificate number in the search field above or scan the QR code
-                    printed on your certificate.
+                    {t("verify.howTo.description")}
                   </p>
                   <div className="rounded-lg bg-muted p-4 text-left">
                     <p className="text-sm font-medium text-foreground">
-                      Certificate Number Format:
+                      {t("verify.howTo.formatTitle")}
                     </p>
                     <p className="mt-2 font-mono text-sm text-muted-foreground">
                       FIBQ-XXXX-XXXX
                     </p>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Enter the certificate number exactly as it appears on your certificate.
+                      {t("verify.howTo.formatHint")}
                     </p>
                   </div>
                 </div>
