@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+// import emailjs from "emailjs-com";
 
 export default function ContactPage() {
   const { t } = useTranslation();
@@ -23,22 +24,57 @@ export default function ContactPage() {
     {
       icon: Mail,
       titleKey: "contact.info.email.title",
-      value: "support@fibq.org",
+      value: "1mraboo0de1@gmail.com",
       descriptionKey: "contact.info.email.description",
     },
-    {
-      icon: Phone,
-      titleKey: "contact.info.phone.title",
-      value: "+1 (555) 123-4567",
-      descriptionKey: "contact.info.phone.description",
-    },
-    {
-      icon: MapPin,
-      titleKey: "contact.info.address.title",
-      value: "123 Certification Ave",
-      descriptionKey: "contact.info.address.description",
-    },
+    // {
+    //   icon: Phone,
+    //   titleKey: "contact.info.phone.title",
+    //   value: "+1 (555) 123-4567",
+    //   descriptionKey: "contact.info.phone.description",
+    // },
+    // {
+    //   icon: MapPin,
+    //   titleKey: "contact.info.address.title",
+    //   value: "123 Certification Ave",
+    //   descriptionKey: "contact.info.address.description",
+    // },
   ];
+
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     await emailjs.send(
+  //       "YOUR_SERVICE_ID",
+  //       "YOUR_TEMPLATE_ID",
+  //       {
+  //         name: formData.name,
+  //         email: formData.email,
+  //         subject: formData.subject,
+  //         message: formData.message,
+  //       },
+  //       "YOUR_PUBLIC_KEY"
+  //     );
+
+  //     toast({
+  //       title: t("contact.form.successTitle"),
+  //       description: t("contact.form.successMessage"),
+  //     });
+
+  //     setFormData({ name: "", email: "", subject: "", message: "" });
+  //   } catch (error) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to send message. Please try again.",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -4,7 +4,7 @@
   "home": {
     "hero": { "title": "Certificat numérique", "subtitle": "Plateforme de vérification", "description": "Vérifiez instantanément l'authenticité des certificats.", "placeholder": "Entrez le numéro...", "verifyNow": "Vérifier", "qrHint": "Ou scannez le code QR" },
     "stats": { "certificatesIssued": "Certificats émis", "verificationAccuracy": "Précision", "availableAnytime": "Disponible 24h/24", "partnerInstitutions": "Partenaires" },
-    "features": { "title": "Pourquoi nous choisir ?", "description": "Sécurité et confiance.", "secure": { "title": "Sécurité", "description": "Chiffrement avancé." }, "instant": { "title": "Instantané", "description": "Vérification en secondes." }, "qrCode": { "title": "Code QR", "description": "Code QR unique." }, "official": { "title": "Officiel", "description": "Signés numériquement." } },
+    "features": { "title": "Pourquoi nous choisir ?", "description": "Notre plateforme délivre des certificats accrédités selon des normes d'évaluation strictes et des mesures de qualité fiables, garantissant que vous obteniez une preuve vérifiable de vos compétences et aptitudes aux plus hauts niveaux d'accréditation.", "secure": { "title": "Sécurité", "description": "Chiffrement avancé." }, "instant": { "title": "Instantané", "description": "Vérification en secondes." }, "qrCode": { "title": "Code QR", "description": "Code QR unique." }, "official": { "title": "Officiel", "description": "Signés numériquement." } },
     "cta": { "title": "Prêt à vérifier ?", "description": "Entrez votre numéro ci-dessus.", "verifyButton": "Page de vérification", "learnMore": "En savoir plus" }
   },
   "verify": {
@@ -15,12 +15,64 @@
     "howTo": { "title": "Comment vérifier", "description": "Entrez le numéro ou scannez.", "formatTitle": "Format :", "formatHint": "Entrez exactement." }
   },
   "about": {
-    "hero": { "title": "À propos de", "subtitle": "Vérification sécurisée et accessible." },
-    "mission": { "label": "Mission", "title": "Éliminer la fraude", "description": "Vérification instantanée mondiale.", "point1": "Sécurisé", "point2": "Instantané", "point3": "Gratuit" },
-    "vision": { "title": "Vision", "description": "Norme mondiale de vérification." },
-    "values": { "title": "Nos valeurs", "subtitle": "Nos principes.", "integrity": { "title": "Intégrité", "description": "Standards élevés." }, "transparency": { "title": "Transparence", "description": "Processus clairs." }, "accessibility": { "title": "Accessibilité", "description": "Accès gratuit." }, "accuracy": { "title": "Précision", "description": "99,9% de précision." } },
-    "journey": { "title": "Notre parcours", "subtitle": "Du projet à la plateforme mondiale." },
-    "timeline": { "2018": { "title": "Lancement", "description": "Début du projet." }, "2020": { "title": "QR", "description": "Scan QR mobile." }, "2022": { "title": "100+ partenaires", "description": "100 partenariats." }, "2024": { "title": "Mondial", "description": "Expansion mondiale." } }
+    "hero": {
+      "title": "Conseil Français International de Qualité",
+      "subtitle": "Autorité privée internationale d’accréditation et de qualité"
+    },
+    "mission": {
+      "label": "Mission",
+      "title": "Éliminer la fraude aux certificats",
+      "description": "Nous fournissons aux centres de formation des outils et normes clairs pour garantir des programmes de formation de haute qualité, soutenus par un système sécurisé de vérification numérique des certificats.",
+      "point1": "Renforcer la confiance dans la formation",
+      "point2": "Certificats accrédités selon des normes strictes",
+      "point3": "Vérification rapide et sécurisée des certificats"
+    },
+    "vision": {
+      "title": "Notre Vision",
+      "description": "Renforcer la crédibilité des institutions éducatives grâce à une accréditation internationale privée qui élève la qualité, la confiance et la reconnaissance professionnelle."
+    },
+    "values": {
+      "title": "Nos services",
+      "subtitle": "Ces principes guident toutes nos actions chez FIBQ.",
+      "integrity": {
+        "title": "Accréditation des programmes de formation",
+        "description": "Évaluer et accréditer les programmes de formation selon des normes strictes pour garantir la qualité du contenu et l’acquisition des compétences."
+      },
+      "transparency": {
+        "title": "Délivrance de certificats accrédités",
+        "description": "Fournir des certificats numériques avec codes QR pour une vérification sécurisée et professionnelle."
+      },
+      "accessibility": {
+        "title": "Évaluation et révision continues",
+        "description": "Surveiller régulièrement les centres de formation accrédités pour maintenir la conformité aux normes internationales."
+      },
+      "accuracy": {
+        "title": "Système sécurisé de vérification numérique",
+        "description": "Permettre aux institutions, étudiants et employeurs de vérifier facilement l’authenticité des certificats."
+      }
+    },
+    "journey": {
+      "title": "Pourquoi choisir FIBQ ?",
+      "subtitle": "Nous nous engageons à fournir ce qui suit :"
+    },
+    "timeline": {
+      "2018": {
+        "title": "Normes d’évaluation strictes",
+        "description": "Garantir une formation et un enseignement de haute qualité."
+      },
+      "2020": {
+        "title": "Accréditation internationale privée",
+        "description": "Renforcer la crédibilité des centres et des certificats."
+      },
+      "2022": {
+        "title": "Opportunités accrues pour les étudiants",
+        "description": "Certificats reconnus internationalement."
+      },
+      "2024": {
+        "title": "Renforcement de la réputation des centres",
+        "description": "L’accréditation distingue votre centre de formation parmi les concurrents."
+      }
+    }
   },
   "contact": {
     "hero": { "title": "Entrez en", "highlight": "Contact", "subtitle": "Nous sommes là pour vous." },

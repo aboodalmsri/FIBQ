@@ -31,22 +31,22 @@ export default function AboutPage() {
 
   const timeline = [
     {
-      year: "2018",
+      year: "1",
       titleKey: "about.timeline.2018.title",
       descriptionKey: "about.timeline.2018.description",
     },
     {
-      year: "2020",
+      year: "2",
       titleKey: "about.timeline.2020.title",
       descriptionKey: "about.timeline.2020.description",
     },
     {
-      year: "2022",
+      year: "3",
       titleKey: "about.timeline.2022.title",
       descriptionKey: "about.timeline.2022.description",
     },
     {
-      year: "2024",
+      year: "4",
       titleKey: "about.timeline.2024.title",
       descriptionKey: "about.timeline.2024.description",
     },

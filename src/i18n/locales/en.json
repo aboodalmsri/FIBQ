@@ -57,7 +57,7 @@
     },
     "features": {
       "title": "Why Choose Our Platform?",
-      "description": "Built with security and trust at its core, our platform ensures every certificate verification is accurate, fast, and reliable.",
+      "description": "Our platform issues accredited certificates under strict evaluation standards and trusted quality measures, ensuring you receive verifiable proof of your skills and competencies at the highest accreditation levels.",
       "secure": {
         "title": "Tamper-Proof Security",
         "description": "Advanced encryption and unique identifiers prevent certificate forgery and duplication."
@@ -119,61 +119,61 @@
   },
   "about": {
     "hero": {
-      "title": "About",
-      "subtitle": "We are dedicated to building trust through secure, transparent, and accessible digital certificate verification."
+      "title": "French International Board for Quality",
+      "subtitle": "Training & Quality Accreditation Authority – Private International Body"
     },
     "mission": {
       "label": "Our Mission",
       "title": "Eliminating Certificate Fraud Worldwide",
-      "description": "Our mission is to create a world where every certificate can be instantly verified, eliminating fraud and building trust between institutions and individuals. We believe that authentic credentials should be easily verifiable by anyone, anywhere.",
-      "point1": "Secure Verification",
-      "point2": "Instant Results",
-      "point3": "Free Access"
+      "description": "We equip training centers with clear tools and standards to ensure high-quality training programs, supported by a secure digital certificate verification system.",
+      "point1": "Trust Training",
+      "point2": "Accredited Certificates",
+      "point3": "Institution Reputation"
     },
     "vision": {
       "title": "Our Vision",
-      "description": "To become the global standard for digital certificate verification, trusted by institutions, employers, and individuals worldwide."
+      "description": "FIBQ is a private international accreditation body registered in France, dedicated to enhancing the quality of training and providing reliable professional certificates for students."
     },
     "values": {
-      "title": "Our Core Values",
+      "title": "What We Do!",
       "subtitle": "These principles guide everything we do at FIBQ.",
       "integrity": {
-        "title": "Integrity",
-        "description": "We maintain the highest standards of data security and certificate authenticity."
+        "title": "Training Program Accreditation",
+        "description": "Evaluate and accredit training programs under rigorous standards to ensure quality content and skill acquisition."
       },
       "transparency": {
-        "title": "Transparency",
-        "description": "Every verification is traceable and our processes are fully transparent."
+        "title": "Issuance of Accredited Certificates",
+        "description": "Provide digital certificates with QR codes for secure and professional verification."
       },
       "accessibility": {
-        "title": "Accessibility",
-        "description": "Free public access to certificate verification for everyone, anywhere."
+        "title": "Continuous Evaluation & Review",
+        "description": "Monitor accredited training centers regularly to maintain alignment with international standards."
       },
       "accuracy": {
-        "title": "Accuracy",
-        "description": "99.9% verification accuracy backed by advanced validation systems."
+        "title": "Secure Digital Verification System",
+        "description": "Allow institutions, students, and employers to verify the authenticity of certificates with ease."
       }
     },
     "journey": {
-      "title": "Our Journey",
-      "subtitle": "From a small project to a global verification platform."
+      "title": "Why Choose FIBQ?",
+      "subtitle": "We are committed to delivering the following."
     },
     "timeline": {
       "2018": {
-        "title": "Platform Launch",
-        "description": "Started as a small project to digitize academic certificates."
+        "title": "Strict Evaluation Standards",
+        "description": "Ensure high-quality training and education."
       },
       "2020": {
-        "title": "QR Integration",
-        "description": "Introduced QR code scanning for instant mobile verification."
+        "title": "Private International Accreditation",
+        "description": "Boosts the credibility of both centers and certificates."
       },
       "2022": {
-        "title": "100+ Partners",
-        "description": "Reached milestone of 100 institutional partnerships."
+        "title": "Enhanced Opportunities for Students",
+        "description": "Certificates recognized internationally (private body)."
       },
       "2024": {
-        "title": "Global Expansion",
-        "description": "Now serving institutions and individuals worldwide."
+        "title": "Reputation Boost for Centers",
+        "description": "Accreditation distinguishes your training center among competitors."
       }
     }
   },
