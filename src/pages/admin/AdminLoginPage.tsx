@@ -195,6 +195,18 @@ export default function AdminLoginPage() {
                   </>
                 )}
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full mt-4"
+                onClick={() => {
+                  window.location.href = "/";
+                }}
+              >
+                {t("Go to Home")}
+              </Button>
+
             </form>
 
             <div className="mt-6 rounded-lg bg-muted p-4">
