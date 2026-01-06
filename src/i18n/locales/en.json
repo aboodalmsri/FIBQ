@@ -41,6 +41,11 @@
     "logout": "Logout"
   },
   "home": {
+    "organization":{
+      "name": "French International Board for Quality",
+      "subtitle": "International Training & Certification Accreditation Body",
+      "description": "FIBQ is dedicated to enhancing the quality of training and providing reliable professional certificates for students worldwide."
+    },
     "hero": {
       "title": "Digital Certificate",
       "subtitle": "Verification Platform",

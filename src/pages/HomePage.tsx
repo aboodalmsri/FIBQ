@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import logo from "@/assets/fibq-logo.png";
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -51,6 +52,72 @@ export default function HomePage() {
 
   return (
     <>
+    {/* Organization Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 py-20 md:py-28">
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute left-10 top-20 h-72 w-72 rounded-full bg-secondary/20 blur-3xl" />
+          <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+        </div>
+
+        <div className="container-page relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto max-w-4xl text-center"
+          >
+            {/* Logo */}
+            <div className="mb-8 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="relative"
+              >
+                <div className="absolute inset-0 rounded-3xl bg-secondary/10 blur-xl" />
+                <div className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5">
+                <img
+                  src={logo}
+                  alt="FIBQ Logo"
+                  className="h-28 w-28 object-contain md:h-32 md:w-32"
+                />
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Organization Name */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6"
+            >
+              <h2 className="font-heading text-3xl font-bold text-slate-900 md:text-4xl">
+                {t("home.organization.name")}
+              </h2>
+              <p className="mt-3 text-xl font-semibold text-secondary md:text-2xl">
+                {t("home.organization.subtitle")}
+              </p>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600 md:text-xl"
+            >
+              {t("home.organization.description")}
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-primary py-20 md:py-32">
         {/* Background Pattern */}
