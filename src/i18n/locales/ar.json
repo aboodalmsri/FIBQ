@@ -55,10 +55,10 @@
       "qrHint": "أو امسح رمز QR على شهادتك للتحقق الفوري"
     },
     "stats": {
-      "certificatesIssued": "الشهادات الصادرة",
-      "verificationAccuracy": "دقة التحقق",
-      "availableAnytime": "متاح دائماً",
-      "partnerInstitutions": "المؤسسات الشريكة"
+      "certificatesIssued": "معاهد التدريب الأكاديمي والمهني",
+      "verificationAccuracy": "أكاديميات أونلاين",
+      "availableAnytime": "مدربون مستقلون",
+      "partnerInstitutions": "شركات التدريب المؤسسية"
     },
     "features": {
       "title": "لماذا تختار منصتنا؟",

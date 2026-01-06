@@ -37,10 +37,10 @@ export default function HomePage() {
   ];
 
   const stats = [
-    { value: "50K+", labelKey: "home.stats.certificatesIssued" },
-    { value: "99.9%", labelKey: "home.stats.verificationAccuracy" },
-    { value: "24/7", labelKey: "home.stats.availableAnytime" },
-    { value: "100+", labelKey: "home.stats.partnerInstitutions" },
+    { value: "⬇", labelKey: "home.stats.certificatesIssued" },
+    { value: "⬇", labelKey: "home.stats.verificationAccuracy" },
+    { value: "⬇", labelKey: "home.stats.availableAnytime" },
+    { value: "⬇", labelKey: "home.stats.partnerInstitutions" },
   ];
 
   const handleVerify = (e: React.FormEvent) => {

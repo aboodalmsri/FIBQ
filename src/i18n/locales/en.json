@@ -55,10 +55,10 @@
       "qrHint": "Or scan the QR code on your certificate for instant verification"
     },
     "stats": {
-      "certificatesIssued": "Certificates Issued",
-      "verificationAccuracy": "Verification Accuracy",
-      "availableAnytime": "Available Anytime",
-      "partnerInstitutions": "Partner Institutions"
+      "certificatesIssued": "Academic & Professional Training Institutes",
+      "verificationAccuracy": "Online Academies",
+      "availableAnytime": "Independent Trainers",
+      "partnerInstitutions": "Corporate Training Companies"
     },
     "features": {
       "title": "Why Choose Our Platform?",
